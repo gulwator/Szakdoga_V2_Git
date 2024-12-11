@@ -1,19 +1,26 @@
-const connectdb = require("../dbConnection/dbConnection");
+
+const {db} = require("../dbConnection/dbConnection");
+const asyncHandler=require("express-async-handler");
 
 // @desc Get all contracts
 //@route GET /api/contracts
 //@access public
 
 const getContacts = (req, res) => {
-  res.status(200).json({ message: "Get all Contacts" });
+ let sql = `SELECT * FROM children`;
+
+  let contacts = db.all(sql,(error,rows)=> {
+    res.status(200).send(rows);
+
+  });
+  // console.log(contracts);
 };
 
 // @desc Create new contracts
 //@route POST /api/contracts
 //@access public
 
-const createChild = (req, res) => {
-  try {
+const createChild = asyncHandler(async (req, res) => {
     const {
       name,
       dateOfbirth,
@@ -48,12 +55,9 @@ const createChild = (req, res) => {
       bandNumber,
       illness,
     ];
-    connectdb.run(query, values);
+    db.run(query, values);
     res.status(201).json({ message: "Child added to database" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+});
 
 // @desc Get contract
 //@route GET /api/contract/:id
