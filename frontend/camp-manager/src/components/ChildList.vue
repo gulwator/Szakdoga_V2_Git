@@ -37,13 +37,16 @@
 </template>
 <script setup>
 import axios from "axios";
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 
 const apiUrl = "http://localhost:3000/api/contacts";
+const children = ref([]);
 const getContacts = async () => {
   try {
     const response = await axios.get(apiUrl);
     console.log(response.data);
+    children.value = response.data;
+    return response;
   } catch (error) {
     console.log(error);
   }
