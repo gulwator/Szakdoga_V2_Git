@@ -112,9 +112,19 @@ const saveContact = async () => {
     toast.error("Fields are required");
   }
   try {
-    const url = "http://localhost:3000/api/contacts";
+    const url = "http://localhost:3000/api/child";
     const response = await axios.post(url, child.value);
     console.log(response);
+    if (response.status === 201) {
+      toast.success = "Child Added Succesfully";
+      child.value.name = "";
+      child.value.dateOfbirth = "";
+      child.value.parantName = "";
+      child.value.parantPhone = "";
+      child.value.address = "";
+      child.value.schoolID = "";
+      child.value.illness = "";
+    }
   } catch (error) {
     console.log(error);
   }

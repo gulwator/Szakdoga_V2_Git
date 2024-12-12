@@ -28,8 +28,17 @@
           <td>{{ child.BandNumber }}</td>
           <td>{{ child.illness }}</td>
           <td>
-            <a href="" class="btn btn-primary btn-sm mr-4">Edit</a>
-            <button class="btn btn-danger btn-sm">Delete</button>
+            <router-link
+              :to="{ name: 'EditChild', params: { id: child.id } }"
+              class="btn btn-primary btn-sm mr-4"
+              >Edit</router-link
+            >
+            <button
+              class="btn btn-danger btn-sm"
+              @click="deleteChild(child.id)"
+            >
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -40,10 +49,12 @@
 import axios from "axios";
 import { ref, onMounted } from "vue";
 import Cliploader from "vue-spinner/src/ClipLoader.vue";
+import { useToast } from "vue-toastification";
 
-const apiUrl = "http://localhost:3000/api/contacts";
+const apiUrl = "http://localhost:3000/api/child";
 const children = ref([]);
 const loading = ref(true);
+const toast = useToast();
 const getContacts = async () => {
   try {
     const response = await axios.get(apiUrl);
@@ -54,6 +65,23 @@ const getContacts = async () => {
     console.log(error);
   } finally {
     loading.value = false;
+  }
+};
+const deleteChild = async (id) => {
+  console.log(id);
+  try {
+    const url = `${apiUrl}/${id}`;
+    if (confirm("All you sure you want to delete the child")) {
+      const response = await axios.delete(url);
+
+      console.log(response);
+      if (response.status === 200) {
+        toast.success("Child deleted succesfully");
+        getContacts();
+      }
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 

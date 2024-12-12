@@ -1,8 +1,8 @@
 const { db } = require("../dbConnection/dbConnection");
 const asyncHandler = require("express-async-handler");
 
-// @desc Get all contracts
-//@route GET /api/contracts
+// @desc Get all children
+//@route GET /api/children
 //@access public
 
 const getContacts = asyncHandler(async (req, res) => {
@@ -11,11 +11,10 @@ const getContacts = asyncHandler(async (req, res) => {
   let contacts = db.all(sql, (error, rows) => {
     res.status(200).send(rows);
   });
-  // console.log(contracts);
 });
 
-// @desc Create new contracts
-//@route POST /api/contracts
+// @desc Create new child
+//@route POST /api/child
 //@access public
 
 const createChild = asyncHandler(async (req, res) => {
@@ -54,22 +53,26 @@ const createChild = asyncHandler(async (req, res) => {
     bandNumber,
     illness,
   ];
-  db.run(query, values);
+  const child = db.run(query, values);
   res.status(201).json({ message: "Child added to database" });
 });
 
-// @desc Get contract
-//@route GET /api/contract/:id
+// @desc Get child
+//@route GET /api/child/:id
 //@access public
 
-const getContact = (req, res) => {
-  res.status(200).json({ message: `Get Contact for ${req.params.id}` });
+const getChild = (req, res) => {
+  const sql = "SELECT * FROM children WHERE id=?";
+  values = [req.params.id];
+  const user = db.get(sql, values, (error, row) => {
+    res.status(200).send(row);
+  });
 };
-// @desc update contract
-//@route PUT /api/contract/:id
+// @desc update child
+//@route PUT /api/child/:id
 //@access public
 
-const updateContact = (req, res) => {
+const updateChild = (req, res) => {
   const {
     name,
     dateOfbirth,
@@ -96,21 +99,24 @@ const updateContact = (req, res) => {
   ];
   db.run(sql, values);
   res.status(201).json({ message: "child modified in database" });
-  // res.status(200).json({ message: `Update Contact for ${req.params.id}` });
 };
 
-// @desc Delete contract
-//@route DELETE /api/contract/:id
+// @desc Delete child
+//@route DELETE /api/child/:id
 //@access public
 
-const deleteContact = (req, res) => {
+const deleteChild = (req, res) => {
+  const sql = "DELETE FROM children WHERE id=?";
+  values = req.params.id;
+
+  db.run(sql, values);
   res.status(200).json({ message: `Contact deleted for ${req.params.id}` });
 };
 
 module.exports = {
   getContacts,
   createChild,
-  getContact,
-  updateContact,
-  deleteContact,
+  getChild,
+  updateChild,
+  deleteChild,
 };
