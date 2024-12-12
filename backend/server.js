@@ -4,7 +4,9 @@ const errorHandler = require("./middleware/errorHandler");
 const db = require("./dbConnection/dbConnection");
 const app = express();
 
-db
+const cors = require("cors");
+db;
+app.use(cors());
 app.use(express.json());
 app.use("/api/contacts", require("./routes/contactRoutes"));
 app.use(errorHandler);
