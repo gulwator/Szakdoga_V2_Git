@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <table class="table table-hover">
+    <Cliploader v-if="loading" />
+    <table v-else class="table table-hover">
       <thead>
         <tr>
           <th>Name</th>
@@ -18,13 +19,13 @@
       <tbody v-for="child in children" v-bind:key="child.id">
         <tr class="table-secondary">
           <td>{{ child.name }}</td>
-          <td>{{ child.dateOfbirth }}</td>
+          <td>{{ child.dateOfBirth }}</td>
           <td>{{ child.parantName }}</td>
           <td>{{ child.parantPhone }}</td>
           <td>{{ child.address }}</td>
           <td>{{ child.schoolID }}</td>
           <td>{{ child.color }}</td>
-          <td>{{ child.bandNumber }}</td>
+          <td>{{ child.BandNumber }}</td>
           <td>{{ child.illness }}</td>
           <td>
             <a href="" class="btn btn-primary btn-sm mr-4">Edit</a>
@@ -38,9 +39,11 @@
 <script setup>
 import axios from "axios";
 import { ref, onMounted } from "vue";
+import Cliploader from "vue-spinner/src/ClipLoader.vue";
 
 const apiUrl = "http://localhost:3000/api/contacts";
 const children = ref([]);
+const loading = ref(true);
 const getContacts = async () => {
   try {
     const response = await axios.get(apiUrl);
@@ -49,6 +52,8 @@ const getContacts = async () => {
     return response;
   } catch (error) {
     console.log(error);
+  } finally {
+    loading.value = false;
   }
 };
 
