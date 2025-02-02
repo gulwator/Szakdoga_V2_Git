@@ -6,7 +6,7 @@ const {
   getChild,
   updateChild,
   deleteChild,
-} = require("../controllers/contactController");
+} = require("../controllers/childController");
 
 router.route("/").get(getContacts);
 
