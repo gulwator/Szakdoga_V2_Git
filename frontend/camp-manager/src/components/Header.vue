@@ -20,6 +20,7 @@
         <router-link class="nav-item nav-link" to="/create-contact"
           >Add Child</router-link
         >
+        <router-link class="nav-item nav-link" to="/login-with-email">Login</router-link>
       </div>
     </div>
   </nav>

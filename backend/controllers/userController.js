@@ -6,7 +6,6 @@ const asyncHandler = require("express-async-handler");
 // @desc    Get all users
 // @route   GET /api/users
 // @access  Public
-
 const getUsers = asyncHandler(async (req, res) => {
   let sql = `SELECT * FROM users`;
 
@@ -15,10 +14,10 @@ const getUsers = asyncHandler(async (req, res) => {
   });
 });
 
+
 // @desc    Register a new user
 // @route   POST /api/users/register
 // @access  Public
-
 const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
@@ -45,10 +44,10 @@ const register = asyncHandler(async (req, res) => {
   res.status(201).json({ message: "User added to database", token });
 });
 
+
 // @desc    Login
 // @route   POST /api/users/login
 // @access  Public
-
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
