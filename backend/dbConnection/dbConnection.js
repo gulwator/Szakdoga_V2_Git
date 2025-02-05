@@ -35,7 +35,7 @@ db.run(
         id integer PRIMARY KEY AUTOINCREMENT,
         username text,
         password text,
-        email text UNIQUE,
+        email text,
         address text)`
 );
 
