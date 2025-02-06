@@ -14,7 +14,6 @@ const getUsers = asyncHandler(async (req, res) => {
   });
 });
 
-
 // @desc    Register a new user
 // @route   POST /api/users/register
 // @access  Public
@@ -24,7 +23,7 @@ const register = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("all fields are reqired!");
   }
-let token="";
+  let token = "";
   // Hash the password
 
   const salt = await bcrypt.genSalt(10);
@@ -37,27 +36,26 @@ let token="";
       res.status(500);
       throw new Error("Database error" + err);
     }
-    console.log(process.env.JWT_SECRET)
+    console.log(process.env.JWT_SECRET);
     token = jwt.sign({ id: this.lastID }, "alma", {
       expiresIn: "30d",
     });
     res.status(201).json({ message: "User added to database", token });
-    console.log()
+    console.log();
   });
 });
-
 
 // @desc    Login
 // @route   POST /api/users/login
 // @access  Public
 const login = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
+  const { username, password } = req.body;
+  if (!username || !password) {
     res.status(400);
     throw new Error("all fields are reqired!");
   }
-  let sql = `SELECT * FROM users WHERE email = ?`;
-  db.get(sql, [email], async (error, row) => {
+  let sql = `SELECT * FROM users WHERE username = ?`;
+  db.get(sql, [username], async (error, row) => {
     if (row && (await bcrypt.compare(password, row.password))) {
       // Generate JWT token
       const token = jwt.sign({ id: row.id }, process.env.JWT_SECRET, {
