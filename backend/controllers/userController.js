@@ -49,20 +49,22 @@ const register = asyncHandler(async (req, res) => {
 // @route   POST /api/users/login
 // @access  Public
 const login = asyncHandler(async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
+  const { email, password } = req.body;
+  console.log(email, password);
+  if (!email || !password) {
     res.status(400);
     throw new Error("all fields are reqired!");
   }
-  let sql = `SELECT * FROM users WHERE username = ?`;
-  db.get(sql, [username], async (error, row) => {
+  let sql = `SELECT * FROM users WHERE email = ?`;
+  db.get(sql, [email], async (error, row) => {
     if (row && (await bcrypt.compare(password, row.password))) {
       // Generate JWT token
+      console.log("eddig jó\n")
       const token = jwt.sign({ id: row.id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
       });
 
-      res.status(200).json({ message: "Login successful", token });
+      res.status(200).json({ message: 1, token });
     } else {
       res.status(401);
       throw new Error("Invalid email or password");

@@ -8,7 +8,7 @@
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
         placeholder="Enter email"
-        v-model="user.name"
+        v-model="user.email"
       />
     </div>
     <div class="form-group">
@@ -28,29 +28,39 @@
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </template>
-<script>
+
+<script setup>
 import { ref } from "vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
 const user = ref({
-  name: "",
+  email: "",
   password: "",
 });
 
 const toast = useToast();
 
 const logIn = async () => {
-  if (!user.value.name || !user.value.password) {
+  if (!user.value.email || !user.value.password) {
     toast.error("Please fill all fields");
   }
-};
-const response = await axios.post("http://localhost:3000/login", user.value);
-if (response.data.success) {
-  var token = result.data.token;
-  console.log(token);
-  toast.success("Logged in successfully");
-} else {
-  toast.error("Invalid credentials");
+  try{
+    console.log(user.value);
+    const response = await axios.post("http://localhost:3000/api/login", user.value);
+    
+    
+    if (response.data.message==1) {
+
+      console.log("bejött");
+      var token = response.data.token;
+      // console.log(token);
+      toast.success("Logged in successfully");
+    } else {
+      toast.error("Invalid credentials");
+    }
+  }catch(error){
+    console.log(error)
+  }
 }
 </script>
 <style></style>
