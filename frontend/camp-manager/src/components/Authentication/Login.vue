@@ -32,35 +32,39 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 const user = ref({
   email: "",
   password: "",
 });
-
+const router = useRouter();
 const toast = useToast();
 
 const logIn = async () => {
   if (!user.value.email || !user.value.password) {
     toast.error("Please fill all fields");
   }
-  try{
+  try {
     console.log(user.value);
-    const response = await axios.post("http://localhost:3000/api/login", user.value);
-    
-    
-    if (response.data.message==1) {
+    const response = await axios.post(
+      "http://localhost:3000/api/login",
+      user.value
+    );
 
+    if (response.data.message == 1) {
       console.log("bejött");
       var token = response.data.token;
       // console.log(token);
+      localStorage.setItem("token", token);
       toast.success("Logged in successfully");
+      router.push("/");
     } else {
       toast.error("Invalid credentials");
     }
-  }catch(error){
-    console.log(error)
+  } catch (error) {
+    console.log(error);
   }
-}
+};
 </script>
 <style></style>

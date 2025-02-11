@@ -13,14 +13,16 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
+      <div class="navbar-nav" v-if="token == null">
         <router-link class="nav-item nav-link active" to="/"
           >List Child</router-link
         >
         <router-link class="nav-item nav-link" to="/create-contact"
           >Add Child</router-link
         >
-        <router-link class="nav-item nav-link" to="/login-with-email">Login</router-link>
+        <router-link class="nav-item nav-link" to="/login-with-email"
+          >Login</router-link
+        >
       </div>
     </div>
   </nav>
@@ -28,7 +30,7 @@
 
 <script setup>
 import router from "@/routes";
-
+let token = localStorage.getItem("token");
 const props = defineProps({
   title: String,
   Required: true,
