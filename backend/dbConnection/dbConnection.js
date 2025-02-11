@@ -31,12 +31,57 @@ db.run(
 );
 
 db.run(
+  `CREATE TABLE IF NOT EXISTS program(
+        id integer PRIMARY KEY AUTOINCREMENT,
+        name text,
+        institutionID integer,
+        )`
+);
+
+db.run(
+  `CREATE TABLE IF NOT EXISTS groups(
+        id integer PRIMARY KEY AUTOINCREMENT,
+        name text,
+        institutionID integer,
+        )`
+);
+
+db.run(
   `CREATE TABLE IF NOT EXISTS users(
         id integer PRIMARY KEY AUTOINCREMENT,
-        username text,
-        password text,
-        email text,
+        username text not null,
+        password text not null,
+        email text unique not null,
+        role text not null,
+        institutionID integer,
+        groupID integer,
+        color integer,
+        bandNumber integer,
         address text)`
 );
+
+/* db.run(
+  `CREATE TABLE IF NOT EXISTS teacher(
+       id integer PRIMARY KEY AUTOINCREMENT,
+         username text not null,
+         password text not null,
+         email text unique not null,
+         institutionID integer not null,
+        groupID integer,
+        role text not null
+        address text)`
+);
+
+db.run(
+  `CREATE TABLE IF NOT EXISTS worker(
+        id integer PRIMARY KEY AUTOINCREMENT,
+        username text not null,
+        password text not null,
+        email text unique not null,
+        groupID integer,
+        role text not null
+        address text)`
+);
+*/
 
 module.exports = { db };
