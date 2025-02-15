@@ -1,5 +1,5 @@
-
-const createTables=(db)=>{
+const dbInitTables = require("./dbInitTables.js");
+const createTables=(db=>{
     
 db.run(
     `CREATE TABLE IF NOT EXISTS children(
@@ -22,7 +22,7 @@ db.run(
           om text UNIQUE NOT NULL,
           address text)`
   );
-  
+  dbInitTables(db);
   db.run(
     `CREATE TABLE IF NOT EXISTS program(
           id integer PRIMARY KEY AUTOINCREMENT,
@@ -77,5 +77,5 @@ db.run(
   );
   */
   
-}
+})
 module.exports = createTables
