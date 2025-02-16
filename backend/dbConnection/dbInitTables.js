@@ -1,7 +1,8 @@
-const dbInitTables=(db)=>{
-    db.run(`INSERT INTO institutions (om,name,address) VALUES ("026991","Városközponti Óvoda","7624 Pécs, Budai Nagy Antal utca 5.  (hrsz.: '3220/16.')"),
-("026993","Nyugati Városrészi Óvoda","7623 Pécs, Mezőszél utca 2.  (hrsz.: '1/11')"),
-("027000","Kertvárosi Óvoda","7632 Pécs, Testvérvárosok tere 1-3.  (hrsz.: '')"),
+const dbInitTables = (db) => {
+  db.run(`INSERT INTO institutions (om,name,address) VALUES 
+        ("026991","Városközponti Óvoda","7624 Pécs, Budai Nagy Antal utca 5.  (hrsz.: '3220/16.')"),
+        ("026993","Nyugati Városrészi Óvoda","7623 Pécs, Mezőszél utca 2.  (hrsz.: '1/11')"),
+        ("027000","Kertvárosi Óvoda","7632 Pécs, Testvérvárosok tere 1-3.  (hrsz.: '')"),
 ("27014","VÁRHEGY ÓVODA ÉS KONYHA","7384 Baranyajenő, Várhegy utca 20.  (hrsz.: '')"),
 ("027017","ERDŐSMECSKEI ÓVODA ÉS KONYHA","7723 Erdősmecske, Petőfi utca 113.  (hrsz.: '215.')"),
 ("027021","ZENGŐ ÓVODA ÉS KONYHA","7694 Hosszúhetény, Fő utca 173.  (hrsz.: '194/1')"),
@@ -199,8 +200,7 @@ const dbInitTables=(db)=>{
 ("028301","Sarkadi Általános Iskola","5720 Sarkad, Kossuth utca 17.  (hrsz.: '3076/4')"),
 ("028303","Battonyai Két Tanítási Nyelvű Szerb Általános Iskola és Óvoda","5830 Battonya, Hunyadi János utca 54.  (hrsz.: '')"),
 ("028304","Magdu Lucian Román Általános Iskola és Óvoda","5830 Battonya, Fő utca 121.  (hrsz.: '3092')");
-`)
+`);
+};
 
-}
-
-module.export = dbInitTables
+module.exports = dbInitTables;
