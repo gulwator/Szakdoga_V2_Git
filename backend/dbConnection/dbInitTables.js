@@ -1,8 +1,8 @@
 const dbInitTables = (db) => {
   db.run(`INSERT INTO institutions (om,name,address) VALUES 
-        ("026991","Városközponti Óvoda","7624 Pécs, Budai Nagy Antal utca 5.  (hrsz.: '3220/16.')"),
-        ("026993","Nyugati Városrészi Óvoda","7623 Pécs, Mezőszél utca 2.  (hrsz.: '1/11')"),
-        ("027000","Kertvárosi Óvoda","7632 Pécs, Testvérvárosok tere 1-3.  (hrsz.: '')"),
+("026991","Városközponti Óvoda","7624 Pécs, Budai Nagy Antal utca 5.  (hrsz.: '3220/16.')"),
+("026993","Nyugati Városrészi Óvoda","7623 Pécs, Mezőszél utca 2.  (hrsz.: '1/11')"),
+("027000","Kertvárosi Óvoda","7632 Pécs, Testvérvárosok tere 1-3.  (hrsz.: '')"),
 ("27014","VÁRHEGY ÓVODA ÉS KONYHA","7384 Baranyajenő, Várhegy utca 20.  (hrsz.: '')"),
 ("027017","ERDŐSMECSKEI ÓVODA ÉS KONYHA","7723 Erdősmecske, Petőfi utca 113.  (hrsz.: '215.')"),
 ("027021","ZENGŐ ÓVODA ÉS KONYHA","7694 Hosszúhetény, Fő utca 173.  (hrsz.: '194/1')"),

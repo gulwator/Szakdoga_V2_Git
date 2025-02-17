@@ -19,7 +19,7 @@ db.run(
     `CREATE TABLE IF NOT EXISTS institutions(
           id integer PRIMARY KEY AUTOINCREMENT,
           name text,
-          om text UNIQUE NOT NULL,
+          om text NOT NULL,
           address text)`
   );
   dbInitTables(db);
