@@ -20,6 +20,7 @@ const getUsers = asyncHandler(async (req, res) => {
 const register = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
+    console.log(username, email, password)
     res.status(400);
     throw new Error("all fields are reqired!");
   }
@@ -60,6 +61,7 @@ const login = asyncHandler(async (req, res) => {
     if (row && (await bcrypt.compare(password, row.password))) {
       // Generate JWT token
       console.log("eddig jó\n")
+      console.log(row)
       const token = jwt.sign({ id: row.id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
       });

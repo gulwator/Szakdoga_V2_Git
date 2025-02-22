@@ -136,7 +136,7 @@ const register = async () => {
   }
   try {
     const response = await axios.post("http://localhost:3000/api/register", {
-      name: user.value.name,
+      username: user.value.name,
       email: user.value.email,
       password: user.value.password,
     });

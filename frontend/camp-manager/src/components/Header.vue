@@ -13,15 +13,27 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <router-link class="nav-item nav-link active" to="/"
+          >Home</router-link
+        >
+
+      </div>
       <div class="navbar-nav" v-if="token == null">
+
+        <router-link class="nav-item nav-link" to="/registration" >Regisztráció</router-link>
+        <router-link class="nav-item nav-link" to="/login-with-email">Bejelentkezés emaillel</router-link>
+      </div>
+      <div class="navbar-nav" v-if="token != null">
+        
         <router-link class="nav-item nav-link active" to="/"
           >List Child</router-link
         >
         <router-link class="nav-item nav-link" to="/create-contact"
           >Add Child</router-link
         >
-        <router-link class="nav-item nav-link" to="/login-with-email"
-          >Login</router-link
+        <router-link class="nav-item nav-link" to="#"
+          >Kijelentkezés</router-link
         >
       </div>
     </div>
