@@ -55,8 +55,10 @@ const logIn = async () => {
     if (response.data.message == 1) {
       console.log("bejött");
       var token = response.data.token;
+      var role = response.data.role;
       // console.log(token);
-      localStorage.setItem("token", token);
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("role", role);
       toast.success("Logged in successfully");
       router.push("/");
     } else {
@@ -64,6 +66,7 @@ const logIn = async () => {
     }
   } catch (error) {
     console.log(error);
+    toast.error("valami nem sikerült");
   }
 };
 </script>

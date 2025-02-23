@@ -18,9 +18,9 @@ const getUsers = asyncHandler(async (req, res) => {
 // @route   POST /api/users/register
 // @access  Public
 const register = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
-    console.log(username, email, password)
+  const { username, email, password, role } = req.body;
+  if (!username || !email || !password || !role) {
+    console.log(username, email, password, role);
     res.status(400);
     throw new Error("all fields are reqired!");
   }
@@ -30,15 +30,17 @@ const register = asyncHandler(async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   // console.log(name, email, hashedPassword);
-  const query = "INSERT INTO users (username, email, password) VALUES(?,?,?)";
-  const values = [username, email, hashedPassword];
+  const query =
+    "INSERT INTO users (username, email, password,role) VALUES(?,?,?,?)";
+  const values = [username, email, hashedPassword, role];
+  console.log(values);
   db.run(query, values, function (err) {
     if (err) {
       res.status(500);
-      throw new Error("Database error" + err);
+      res.json({ error: err.message });
     }
     console.log(process.env.JWT_SECRET);
-    token = jwt.sign({ id: this.lastID }, "alma", {
+    token = jwt.sign({ id: this.lastID }, process.env.JWT_SECRET, {
       expiresIn: "30d",
     });
     res.status(201).json({ message: "User added to database", token });
@@ -60,16 +62,16 @@ const login = asyncHandler(async (req, res) => {
   db.get(sql, [email], async (error, row) => {
     if (row && (await bcrypt.compare(password, row.password))) {
       // Generate JWT token
-      console.log("eddig jó\n")
-      console.log(row)
+      console.log("eddig jó\n");
+      console.log(row);
       const token = jwt.sign({ id: row.id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
       });
 
-      res.status(200).json({ message: 1, token });
+      res.status(200).json({ message: 1, token, role: row.role });
     } else {
-      res.status(401);
-      throw new Error("Invalid email or password");
+      res.status(401).json({ message: 0 });
+      // throw new Error("Invalid email or password");
     }
   });
 });

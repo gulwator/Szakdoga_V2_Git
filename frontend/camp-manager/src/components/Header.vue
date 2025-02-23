@@ -14,18 +14,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <router-link class="nav-item nav-link active" to="/"
-          >Home</router-link
+        <router-link class="nav-item nav-link active" to="/">Home</router-link>
+      </div>
+      <div class="navbar-nav" v-if="role == null">
+        <router-link class="nav-item nav-link" to="/registration"
+          >Regisztráció</router-link
         >
-
+        <router-link class="nav-item nav-link" to="/login-with-email"
+          >Bejelentkezés emaillel</router-link
+        >
       </div>
-      <div class="navbar-nav" v-if="token == null">
-
-        <router-link class="nav-item nav-link" to="/registration" >Regisztráció</router-link>
-        <router-link class="nav-item nav-link" to="/login-with-email">Bejelentkezés emaillel</router-link>
-      </div>
-      <div class="navbar-nav" v-if="token != null">
-        
+      <div class="navbar-nav" v-if="role == kisero">
         <router-link class="nav-item nav-link active" to="/"
           >List Child</router-link
         >
@@ -42,7 +41,8 @@
 
 <script setup>
 import router from "@/routes";
-let token = localStorage.getItem("token");
+let token = sessionStorage.getItem("token");
+let role = sessionStorage.getItem("role");
 const props = defineProps({
   title: String,
   Required: true,
