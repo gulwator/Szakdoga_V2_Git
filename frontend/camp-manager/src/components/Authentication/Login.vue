@@ -34,12 +34,14 @@ import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
+import { useStore } from "vuex";
 const user = ref({
   email: "",
   password: "",
 });
 const router = useRouter();
 const toast = useToast();
+const store = useStore();
 
 const logIn = async () => {
   if (!user.value.email || !user.value.password) {
@@ -56,9 +58,12 @@ const logIn = async () => {
       console.log("bejött");
       var token = response.data.token;
       var role = response.data.role;
+      store.commit("changeRoleTo" + role);
+
       // console.log(token);
-      sessionStorage.setItem("token", token);
-      sessionStorage.setItem("role", role);
+      // sessionStorage.setItem("token", token);
+      // this.$role = role;
+      // sessionStorage.setItem("role", role);
       toast.success("Logged in successfully");
       router.push("/");
     } else {

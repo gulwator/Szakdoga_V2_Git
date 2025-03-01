@@ -4,13 +4,22 @@ import EditChild from "./components/EditChild.vue";
 import LoginWithEmail from "./components/Authentication/Login.vue";
 import Registration from "./components/Authentication/Registration.vue";
 import { createRouter, createWebHistory } from "vue-router";
+import RegistrationForm from "./components/Authentication/Register.vue";
 
 const routes = [
   {
     name: "Registration",
     path: "/registration",
     component: Registration,
+    props: true,
   },
+  {
+    name: "RegistrationForm",
+    path: "/registration/:userType",
+    component: RegistrationForm,
+    props: true,
+  },
+
   {
     name: "LoginWithEmail",
     path: "/login-with-email",

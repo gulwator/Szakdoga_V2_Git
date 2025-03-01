@@ -9,3 +9,11 @@ export default {
   components: { Header },
 };
 </script>
+<style>
+body {
+  height: 100vh;
+}
+#app {
+  height: 100vh;
+}
+</style>

@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">{{ title }}</a>
+    <a class="navbar-brand" href="#">Camp Manager</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -16,7 +16,7 @@
       <div class="navbar-nav">
         <router-link class="nav-item nav-link active" to="/">Home</router-link>
       </div>
-      <div class="navbar-nav" v-if="role == null">
+      <div class="navbar-nav" v-if="store.state.role === 'null'">
         <router-link class="nav-item nav-link" to="/registration"
           >Regisztráció</router-link
         >
@@ -24,27 +24,30 @@
           >Bejelentkezés emaillel</router-link
         >
       </div>
-      <div class="navbar-nav" v-if="role == kisero">
+      <div class="navbar-nav" v-if="store.state.role === 'kisero'">
         <router-link class="nav-item nav-link active" to="/"
           >List Child</router-link
         >
         <router-link class="nav-item nav-link" to="/create-contact"
           >Add Child</router-link
         >
-        <router-link class="nav-item nav-link" to="#"
+        <router-link class="nav-item nav-link" @click="logout" to="#"
           >Kijelentkezés</router-link
         >
       </div>
     </div>
   </nav>
 </template>
-
 <script setup>
 import router from "@/routes";
-let token = sessionStorage.getItem("token");
-let role = sessionStorage.getItem("role");
-const props = defineProps({
-  title: String,
-  Required: true,
-});
+import { useStore } from "vuex";
+
+const store = useStore();
+
+// Kilépés funkció
+const logout = () => {
+  sessionStorage.removeItem("role");
+  store.commit("changeRoleToNone");
+  router.push("/");
+};
 </script>
