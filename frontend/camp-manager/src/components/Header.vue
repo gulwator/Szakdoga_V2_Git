@@ -26,10 +26,10 @@
       </div>
       <div class="navbar-nav" v-if="store.state.role === 'kisero'">
         <router-link class="nav-item nav-link active" to="/"
-          >List Child</router-link
+          >Gyerekek listája</router-link
         >
         <router-link class="nav-item nav-link" to="/create-contact"
-          >Add Child</router-link
+          >Gyerek hozzáadása</router-link
         >
         <router-link class="nav-item nav-link" @click="logout" to="#"
           >Kijelentkezés</router-link

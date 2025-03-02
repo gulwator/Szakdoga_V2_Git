@@ -18,11 +18,14 @@ const getUsers = asyncHandler(async (req, res) => {
 // @route   POST /api/users/register
 // @access  Public
 const register = asyncHandler(async (req, res) => {
-  const { username, email, password, role } = req.body;
-  if (!username || !email || !password || !role) {
-    console.log(username, email, password, role);
+  const { username, email, password, role, institution, address } = req.body;
+  if (!username || !email || !password || !role || !address) {
+    console.log(username, email, password, role, address);
     res.status(400);
     throw new Error("all fields are reqired!");
+  }
+  if (institution == null) {
+    institution = "none";
   }
   let token = "";
   // Hash the password
@@ -31,8 +34,8 @@ const register = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
   // console.log(name, email, hashedPassword);
   const query =
-    "INSERT INTO users (username, email, password,role) VALUES(?,?,?,?)";
-  const values = [username, email, hashedPassword, role];
+    "INSERT INTO users (username, email, password,role,institutionID,address) VALUES(?,?,?,?,?,?)";
+  const values = [username, email, hashedPassword, role, institution, address];
   console.log(values);
   db.run(query, values, function (err) {
     if (err) {

@@ -2,7 +2,7 @@
   <div class="h-100 d-flex justify-content-center align-items-center">
     <div>
       <div
-        @click="navigateToForm('teacher')"
+        @click="navigateToForm('Kisero')"
         class="btn btn-outline-primary square-btn"
       >
         <img class="btn-img" src="/teacher_1995413.png" alt="Teacher" />
@@ -10,7 +10,7 @@
         <div>Register as Teacher</div>
       </div>
       <div
-        @click="navigateToForm('worker')"
+        @click="navigateToForm('Taboroztato')"
         class="btn btn-outline-primary square-btn"
       >
         <img class="btn-img" src="/burn_13350109.png" alt="Campside" />
