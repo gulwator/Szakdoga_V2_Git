@@ -5,6 +5,8 @@ import LoginWithEmail from "./components/Authentication/Login.vue";
 import Registration from "./components/Authentication/Registration.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import RegistrationForm from "./components/Authentication/Register.vue";
+import ManageGroups from "./components/ManageGroups.vue";
+import Home from "./Home.vue";
 
 const routes = [
   {
@@ -19,7 +21,6 @@ const routes = [
     component: RegistrationForm,
     props: true,
   },
-
   {
     name: "LoginWithEmail",
     path: "/login-with-email",
@@ -27,7 +28,7 @@ const routes = [
   },
   {
     name: "ChildList",
-    path: "/",
+    path: "/child-list",
     component: ChildList,
   },
   {
@@ -36,6 +37,16 @@ const routes = [
     component: AddChild,
   },
   { name: "EditChild", path: "/contact/:id?", component: EditChild },
+  {
+    name: "ManageGroups",
+    path: "/manage-groups",
+    component: ManageGroups,
+  },
+  {
+    name: "Home",
+    path: "/",
+    component: Home,
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),

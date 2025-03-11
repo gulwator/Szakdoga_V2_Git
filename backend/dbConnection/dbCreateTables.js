@@ -1,7 +1,6 @@
 const dbInitTables = require("./dbInitTables.js");
-const createTables=(db=>{
-    
-db.run(
+const createTables = (db) => {
+  db.run(
     `CREATE TABLE IF NOT EXISTS children(
           id integer PRIMARY KEY AUTOINCREMENT,
           name text NOT NULL,
@@ -9,10 +8,10 @@ db.run(
           parantName text NOT NULL,
           parantPhone integer NOT NULL,
           address text NOT NULL,
-          schoolID integer NOT NULL,
+          schoolId integer NOT NULL,
           color integer,
-          groupID integer,
-          BandNumber integer,
+          groupId integer,
+          bandNumber integer,
           illness text)`
   );
   db.run(
@@ -22,60 +21,63 @@ db.run(
           om text NOT NULL,
           address text)`
   );
-  dbInitTables(db);
   db.run(
     `CREATE TABLE IF NOT EXISTS program(
           id integer PRIMARY KEY AUTOINCREMENT,
           name text,
-          institutionID integer
+          institutionId integer
           )`
   );
-  
+
   db.run(
     `CREATE TABLE IF NOT EXISTS groups(
-          id integer PRIMARY KEY AUTOINCREMENT,
-          name text,
-          institutionID integer
+            id integer PRIMARY KEY AUTOINCREMENT,
+            name text,
+          institutionId integer
           )`
   );
-  
+  db.run(
+    `CREATE TABLE IF NOT EXISTS teachersInGroups(userIds integer, groupId integer)`
+  );
+
   db.run(
     `CREATE TABLE IF NOT EXISTS users(
-          id integer PRIMARY KEY AUTOINCREMENT,
-          username text not null,
-          password text not null,
-          email text unique not null,
-          role text not null,
-          institutionID integer,
-          groupID integer,
-          color integer,
-          bandNumber integer,
-          address text)`
+      id integer PRIMARY KEY AUTOINCREMENT,
+      username text not null,
+      password text not null,
+      name text not null,
+      email text unique not null,
+      role text not null,
+      institutionId integer,
+      groupId integer,
+      color integer,
+      bandNumber integer,
+      address text)`
   );
-  
+
   /* db.run(
-    `CREATE TABLE IF NOT EXISTS teacher(
-         id integer PRIMARY KEY AUTOINCREMENT,
+      `CREATE TABLE IF NOT EXISTS teacher(
+        id integer PRIMARY KEY AUTOINCREMENT,
            username text not null,
            password text not null,
            email text unique not null,
-           institutionID integer not null,
-          groupID integer,
-          role text not null
-          address text)`
-  );
-  
-  db.run(
-    `CREATE TABLE IF NOT EXISTS worker(
+           institutionId integer not null,
+           groupId integer,
+           role text not null
+           address text)`
+           );
+           
+           db.run(
+            `CREATE TABLE IF NOT EXISTS worker(
           id integer PRIMARY KEY AUTOINCREMENT,
           username text not null,
           password text not null,
           email text unique not null,
-          groupID integer,
+          groupId integer,
           role text not null
           address text)`
-  );
-  */
-  
-})
-module.exports = createTables
+          );
+          */
+  dbInitTables(db);
+};
+module.exports = createTables;

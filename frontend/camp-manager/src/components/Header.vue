@@ -16,6 +16,7 @@
       <div class="navbar-nav">
         <router-link class="nav-item nav-link active" to="/">Home</router-link>
       </div>
+      <!--                 BEJELENTKEZÉS NÉLKÜLI           -->
       <div class="navbar-nav" v-if="store.state.role === 'null'">
         <router-link class="nav-item nav-link" to="/registration"
           >Regisztráció</router-link
@@ -24,14 +25,18 @@
           >Bejelentkezés emaillel</router-link
         >
       </div>
+      <!--                KISÉRŐI BELÉPÉS                    -->
       <div class="navbar-nav" v-if="store.state.role === 'kisero'">
-        <router-link class="nav-item nav-link active" to="/"
+        <router-link class="nav-item nav-link active" to="/child-list"
           >Gyerekek listája</router-link
         >
         <router-link class="nav-item nav-link" to="/create-contact"
           >Gyerek hozzáadása</router-link
         >
-        <router-link class="nav-item nav-link" @click="logout" to="#"
+        <router-link class="nav-item nav-link" to="/manage-groups"
+          >Csoportok kezelése</router-link
+        >
+        <router-link class="nav-item nav-link" @click="logout" to="/"
           >Kijelentkezés</router-link
         >
       </div>

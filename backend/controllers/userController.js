@@ -18,14 +18,11 @@ const getUsers = asyncHandler(async (req, res) => {
 // @route   POST /api/users/register
 // @access  Public
 const register = asyncHandler(async (req, res) => {
-  const { username, email, password, role, institution, address } = req.body;
-  if (!username || !email || !password || !role || !address) {
-    console.log(username, email, password, role, address);
-    res.status(400);
-    throw new Error("all fields are reqired!");
-  }
+  const { username, name, email, password, role, institution, address } =
+    req.body;
+
   if (institution == null) {
-    institution = "none";
+    institution = undefined;
   }
   let token = "";
   // Hash the password
@@ -33,21 +30,31 @@ const register = asyncHandler(async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   // console.log(name, email, hashedPassword);
-  const query =
-    "INSERT INTO users (username, email, password,role,institutionID,address) VALUES(?,?,?,?,?,?)";
-  const values = [username, email, hashedPassword, role, institution, address];
+  const query = `INSERT INTO users (
+  username, 
+  password,
+  name, 
+  email, 
+  role,
+  institutionId,
+  address
+  ) VALUES(?,?,?,?,?,?,?)`;
+  const values = [
+    username,
+    hashedPassword,
+    name,
+    email,
+    role,
+    institution,
+    address,
+  ];
   console.log(values);
   db.run(query, values, function (err) {
     if (err) {
-      res.status(500);
-      res.json({ error: err.message });
+      return res.json({ error: err.message });
     }
-    console.log(process.env.JWT_SECRET);
-    token = jwt.sign({ id: this.lastID }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
-    res.status(201).json({ message: "User added to database", token });
-    console.log();
+
+    res.status(201).json({ message: "User added to database" });
   });
 });
 
