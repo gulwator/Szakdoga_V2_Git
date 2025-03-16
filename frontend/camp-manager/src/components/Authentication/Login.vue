@@ -48,24 +48,24 @@ const logIn = async () => {
     toast.error("Please fill all fields");
   }
   try {
-    console.log(user.value);
     const response = await axios.post(
       "http://localhost:3000/api/login",
       user.value
     );
 
     if (response.data.message == 1) {
-      console.log("bejött");
       var token = response.data.token;
       var role = response.data.role;
-      store.commit("changeRoleTo" + role);
+      store.dispatch("changeRole", role);
+      store.dispatch("changeInstitution", response.data.institution);
+      store.dispatch("changeToken", token);
 
       // console.log(token);
       // sessionStorage.setItem("token", token);
       // this.$role = role;
       // sessionStorage.setItem("role", role);
       toast.success("Logged in successfully");
-      router.push("/");
+      router.push("/child-list");
     } else {
       toast.error("Invalid credentials");
     }

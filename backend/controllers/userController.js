@@ -3,9 +3,10 @@ const bcrypt = require("bcryptjs");
 const { db } = require("../dbConnection/dbConnection");
 const asyncHandler = require("express-async-handler");
 
-// @desc    Get all users
+/**    Get all users
 // @route   GET /api/users
 // @access  Public
+*/
 const getUsers = asyncHandler(async (req, res) => {
   let sql = `SELECT * FROM users`;
 
@@ -14,9 +15,10 @@ const getUsers = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc    Register a new user
+/**    Register a new user
 // @route   POST /api/users/register
 // @access  Public
+*/
 const register = asyncHandler(async (req, res) => {
   const { username, name, email, password, role, institution, address } =
     req.body;
@@ -24,7 +26,7 @@ const register = asyncHandler(async (req, res) => {
   if (institution == null) {
     institution = undefined;
   }
-  let token = "";
+
   // Hash the password
 
   const salt = await bcrypt.genSalt(10);
@@ -58,9 +60,9 @@ const register = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc    Login
+/**    Login
 // @route   POST /api/users/login
-// @access  Public
+// @access  Public*/
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   console.log(email, password);
@@ -78,7 +80,12 @@ const login = asyncHandler(async (req, res) => {
         expiresIn: "30d",
       });
 
-      res.status(200).json({ message: 1, token, role: row.role });
+      res.status(200).json({
+        message: 1,
+        token,
+        role: row.role,
+        institution: row.institutionId,
+      });
     } else {
       res.status(401).json({ message: 0 });
       // throw new Error("Invalid email or password");
@@ -105,5 +112,7 @@ const protect = asyncHandler(async (req, res, next) => {
     }
   }
 });
+
+//TODO:GET TEACHERS FROM INSTITUTION
 
 module.exports = { getUsers, register, login, protect };

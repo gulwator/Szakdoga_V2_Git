@@ -12,6 +12,7 @@ app.use(express.json());
 app.use("/api/child", require("./routes/childRoutes"));
 app.use("/api", require("./routes/userRoutes"));
 app.use("/api", require("./routes/institutionRoutes"));
+app.use("/api/groups", require("./routes/groupRoutes"));
 app.use(errorHandler);
 
 const port = parseInt(process.env.port);

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-if="store.state.role != 'null'" class="container">
     <Cliploader v-if="loading" />
     <table v-else class="table table-hover">
       <thead>
@@ -9,10 +9,6 @@
           <th>Parent name</th>
           <th>Parent Phone</th>
           <th>Address</th>
-          <th>SchooldID</th>
-          <th>Color</th>
-          <th>Band Number</th>
-          <th>Illness</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -23,10 +19,7 @@
           <td>{{ child.parantName }}</td>
           <td>{{ child.parantPhone }}</td>
           <td>{{ child.address }}</td>
-          <td>{{ child.schoolID }}</td>
-          <td>{{ child.color }}</td>
-          <td>{{ child.BandNumber }}</td>
-          <td>{{ child.illness }}</td>
+
           <td>
             <router-link
               :to="{ name: 'EditChild', params: { id: child.id } }"
@@ -39,6 +32,7 @@
             >
               Delete
             </button>
+            <button @click="Modal"></button>
           </td>
         </tr>
       </tbody>
@@ -47,18 +41,24 @@
 </template>
 <script setup>
 import axios from "axios";
+import { Modal } from "bootstrap/dist/js/bootstrap.bundle.min";
 import { ref, onMounted } from "vue";
 import Cliploader from "vue-spinner/src/ClipLoader.vue";
 import { useToast } from "vue-toastification";
 
-const apiUrl = "http://localhost:3000/api/child";
+import { useStore } from "vuex";
+
+const store = useStore();
+
+const institutionId = store.getters.getInstitution;
+const apiUrl = "http://localhost:3000/api/child/institution/" + institutionId;
 const children = ref([]);
 const loading = ref(true);
 const toast = useToast();
 const getContacts = async () => {
   try {
     const response = await axios.get(apiUrl);
-    console.log(response.data);
+
     children.value = response.data;
     return response;
   } catch (error) {
@@ -68,13 +68,11 @@ const getContacts = async () => {
   }
 };
 const deleteChild = async (id) => {
-  console.log(id);
   try {
     const url = `${apiUrl}/${id}`;
     if (confirm("All you sure you want to delete the child")) {
       const response = await axios.delete(url);
 
-      console.log(response);
       if (response.status === 200) {
         toast.success("Child deleted succesfully");
         getContacts();
@@ -86,7 +84,6 @@ const deleteChild = async (id) => {
 };
 
 onMounted(() => {
-  console.log("Contacts List Component mounted");
   getContacts();
 });
 </script>

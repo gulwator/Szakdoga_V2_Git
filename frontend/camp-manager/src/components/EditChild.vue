@@ -53,7 +53,7 @@
           <div class="form-group">
             <input
               type="text"
-              v-model="child.schoolID"
+              v-model="child.schoolId"
               class="form-control"
               placeholder="School"
             />
@@ -96,7 +96,7 @@ const child = ref({
   parantName: "",
   parantPhone: "",
   address: "",
-  schoolID: "",
+  schoolId: "",
   color: "",
   bandNumber: "",
   illness: "",
@@ -120,7 +120,7 @@ const updateChild = async () => {
     !child.value.parantName ||
     !child.value.parantPhone ||
     !child.value.address ||
-    !child.value.schoolID ||
+    !child.value.schoolId ||
     !child.value.illness
   ) {
     toast.error("Fields are required");

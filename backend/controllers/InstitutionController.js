@@ -1,9 +1,10 @@
 const { db } = require("../dbConnection/dbConnection");
 const asyncHandler = require("express-async-handler");
 
-// @desc Get all institutions
-//@route GET /api/institutions
-//@access public
+/** Get all institutions
+ * GET /api/institutions
+ * @access public
+ */
 const getInstitutions = asyncHandler(async (req, res) => {
   let sql = `SELECT * FROM institutions`;
   console.log("getInstitutions");
@@ -15,4 +16,5 @@ const getInstitutions = asyncHandler(async (req, res) => {
     res.status(200).send(rows);
   });
 });
+
 module.exports = { getInstitutions };

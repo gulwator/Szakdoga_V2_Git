@@ -17,7 +17,7 @@
         <router-link class="nav-item nav-link active" to="/">Home</router-link>
       </div>
       <!--                 BEJELENTKEZÉS NÉLKÜLI           -->
-      <div class="navbar-nav" v-if="store.state.role === 'null'">
+      <div class="navbar-nav" v-if="role === 'null'">
         <router-link class="nav-item nav-link" to="/registration"
           >Regisztráció</router-link
         >
@@ -26,7 +26,7 @@
         >
       </div>
       <!--                KISÉRŐI BELÉPÉS                    -->
-      <div class="navbar-nav" v-if="store.state.role === 'kisero'">
+      <div class="navbar-nav" v-if="role === 'Kisero'">
         <router-link class="nav-item nav-link active" to="/child-list"
           >Gyerekek listája</router-link
         >
@@ -45,14 +45,31 @@
 </template>
 <script setup>
 import router from "@/routes";
+import { computed, watch } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
 
+const role = computed(() => store.getters.getRole);
+const institution = computed(() => store.getters.getInstitution);
+const token = computed(() => store.getters.getToken);
+
+watch(role, (newRole, oldRole) => {
+  console.log(`Role megváltozott: ${oldRole} → ${newRole}`);
+});
+watch(institution, (newInstitution, oldInstitution) => {
+  console.log(
+    `Institution megváltozott: ${oldInstitution} → ${newInstitution}`
+  );
+});
+watch(token, (newToken, oldToken) => {
+  console.log(`Token megváltozott: ${oldToken} → ${newToken}`);
+});
 // Kilépés funkció
 const logout = () => {
-  sessionStorage.removeItem("role");
-  store.commit("changeRoleToNone");
+  store.dispatch("changeToken", "null");
+  store.dispatch("changeInstitution", "null");
+  store.dispatch("changeRole", "null");
   router.push("/");
 };
 </script>

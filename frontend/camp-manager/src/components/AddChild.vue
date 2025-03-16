@@ -53,7 +53,7 @@
           <div class="form-group">
             <input
               type="text"
-              v-model="child.schoolID"
+              v-model="child.groupId"
               class="form-control"
               placeholder="School"
             />
@@ -85,6 +85,7 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
+import store from "@/store";
 
 const child = ref({
   name: "",
@@ -92,12 +93,24 @@ const child = ref({
   parantName: "",
   parantPhone: "",
   address: "",
-  schoolID: "",
+  schoolId: "",
+  groupId: "",
   color: "",
   bandNumber: "",
   illness: "",
 });
 const toast = useToast();
+
+const groups = async () => {
+  try {
+    const response = await axios.get("http://localhost:3000/api/group");
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loading.value = false;
+  }
+};
+
 const saveContact = async () => {
   console.log("Child values:", child.value);
   if (
@@ -106,7 +119,6 @@ const saveContact = async () => {
     !child.value.parantName ||
     !child.value.parantPhone ||
     !child.value.address ||
-    !child.value.schoolID ||
     !child.value.illness
   ) {
     toast.error("Fields are required");
@@ -122,7 +134,7 @@ const saveContact = async () => {
       child.value.parantName = "";
       child.value.parantPhone = "";
       child.value.address = "";
-      child.value.schoolID = "";
+      child.value.schoolId = store.getters.getInstitution;
       child.value.illness = "";
     }
   } catch (error) {
