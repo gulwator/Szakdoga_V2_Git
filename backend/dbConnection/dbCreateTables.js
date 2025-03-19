@@ -37,7 +37,7 @@ const createTables = (db) => {
           )`
   );
   db.run(
-    `CREATE TABLE IF NOT EXISTS teachersInGroups(userIds integer, groupId integer)`
+    `CREATE TABLE IF NOT EXISTS teachersInGroups(userId integer, groupId integer)`
   );
 
   db.run(
