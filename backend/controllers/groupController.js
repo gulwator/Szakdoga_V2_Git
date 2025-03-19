@@ -1,7 +1,7 @@
 const { db } = require("../dbConnection/dbConnection");
 const asyncHandler = require("express-async-handler");
 
-/** Get all groups from istitution
+/** Get all groups from given istitution
  * GET /api/groups/:institutionId/getGroups
  * @access public
  */
@@ -21,7 +21,7 @@ const getGroups = asyncHandler(async (req, res) => {
  * @access public
  */
 const getGroupTeachers = asyncHandler(async (req, res) => {
-  let sql = `SELECT u.id, u.name, u.address, t.groupId  FROM users AS u LEFT JOIN teachersInGroups AS t ON u.id = t.userIds Where u.institutionId =${req.params.institutionId}`;
+  let sql = `SELECT DISTINCT  u.id, u.name, u.address, t.groupId  FROM users AS u LEFT JOIN teachersInGroups AS t ON u.id = t.userId Where u.institutionId =${req.params.institutionId}`;
   let groups = db.all(sql, (error, rows) => {
     if (error) {
       res.status(500).json({ error: error.message });
@@ -31,13 +31,13 @@ const getGroupTeachers = asyncHandler(async (req, res) => {
   });
 });
 
-/** add to groups
+/** add new group to groups
  * POST /api/groups
  * @access public
  */
 const addGroup = asyncHandler(async (req, res) => {
   let sql = `INSERT INTO groups (name, institutionId) VALUES(?,?)`;
-  const { name } = req.body;
+  const { name, institutionId } = req.body;
   db.run(sql, [name, institutionId], (error) => {
     if (error) {
       res.status(500).json({ error: error.message });
@@ -51,7 +51,6 @@ const addGroup = asyncHandler(async (req, res) => {
  * POST /api/groups
  * @access public
  */
-
 const addGroupTeacher = asyncHandler(async (req, res) => {
   let sql = `INSERT INTO teachersInGroups (userIds, groupId) VALUES(?,?)`;
   const { userIds, groupId } = req.body;
@@ -64,4 +63,53 @@ const addGroupTeacher = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { getGroups, addGroup, addGroupTeacher, getGroupTeachers };
+const Savegroupsintodatabase = async (req, res) => {
+  const { users = [], children = [] } = req.body; // Alapértelmezett üres tömbök
+
+  const insertUsers =
+    users.length > 0
+      ? users.map((user) => {
+          return new Promise((resolve, reject) => {
+            db.run(
+              `INSERT INTO teachersInGroups (userId, groupId) VALUES (?, ?)`,
+              [user.id, user.groupId],
+              (error) => {
+                if (error) reject(error);
+                else resolve();
+              }
+            );
+          });
+        })
+      : [];
+
+  const insertChildren =
+    children.length > 0
+      ? children.map((child) => {
+          return new Promise((resolve, reject) => {
+            db.run(
+              `UPDATE children SET groupId = ? WHERE id = ?`,
+              [child.groupId, child.id],
+              (error) => {
+                if (error) reject(error);
+                else resolve();
+              }
+            );
+          });
+        })
+      : [];
+
+  try {
+    await Promise.all([...insertUsers, ...insertChildren]);
+    res.status(201).json({ message: "Users and children added to database" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  getGroups,
+  addGroup,
+  addGroupTeacher,
+  getGroupTeachers,
+  Savegroupsintodatabase,
+};
