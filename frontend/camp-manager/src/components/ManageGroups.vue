@@ -2,7 +2,7 @@
   <div class="container mt-5">
     <div class="container">
       <div class="d-flex flex-row-reverse">
-        <button class="button p-2" type="button" @click="saveGroups">
+        <button class="button p-2" type="button" @click="saveGroup()">
           Mentés
         </button>
       </div>
@@ -217,7 +217,7 @@ function listChild() {
   notGroupChildren.value = children.value.filter((child) => {
     return child.groupId != selectedItem.value.id;
   });
-  // console.log("kiválogatott list:\n", sortedChildren);
+  // console.log("kiválogatott list:\n", sortedChildren.value);
 }
 
 // Add child to opened group
@@ -247,24 +247,6 @@ function listTeacher() {
   });
 }
 
-// Save groups
-const saveGroups = async (groupId) => {
-  console.log("users:", JSON.stringify(sortedTeachers.value));
-  console.log("children: ", JSON.stringify(sortedChildren.value));
-  try {
-    await axios.put("http://localhost:3000/api/groups/saveGroups", {
-      users: sortedTeachers.value,
-      children: sortedChildren.value,
-    });
-    teacherBackup.value = JSON.parse(JSON.stringify(teachers.value));
-    childrenBackup.value = JSON.parse(JSON.stringify(children.value));
-    toast.success("Csoportok sikeresen mentve!");
-    saved.value = true;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 watch(
   selectedItem,
   (newValue, oldValue) => {
@@ -272,7 +254,8 @@ watch(
     if (saved.value === false) {
       // TODO: A sortedGroup az már a befrissült verzió amikor mentek.
       console.log("watched sort:", sortedTeachers.value);
-      showConfirmDialog.value = true;
+      OpenConfirmDialog();
+
       console.log("nincs mentve");
     }
 
@@ -290,20 +273,48 @@ onMounted(() => {
   getTeachers();
 });
 
+let teachersTodb = [];
+let childrensTodb = [];
+function OpenConfirmDialog() {
+  showConfirmDialog.value = true;
+  console.log(JSON.stringify(sortedTeachers.value));
+  teachersTodb = JSON.parse(JSON.stringify(sortedTeachers.value));
+  childrensTodb = JSON.parse(JSON.stringify(sortedChildren.value));
+}
+// Save groups
+const saveGroup = async (
+  teachers = sortedTeachers.value,
+  children = sortedChildren.value
+) => {
+  console.log("users:", teachers);
+  console.log("children: ", children);
+  try {
+    await axios.put("http://localhost:3000/api/groups/saveGroups", {
+      users: teachers,
+      children: children,
+    });
+    teacherBackup.value = JSON.parse(JSON.stringify(teachers));
+    childrenBackup.value = JSON.parse(JSON.stringify(children));
+    toast.success("Csoportok sikeresen mentve!");
+    saved.value = true;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Save groups
+
 // Modal
 const saveAndClose = () => {
-  saveGroups();
-  showConfirmDialog.value = false;
+  saveGroup(teachersTodb, childrensTodb);
   saved.value = true;
-  listTeacher;
+  showConfirmDialog.value = false;
 };
 const cancelSave = () => {
   teachers.value = JSON.parse(JSON.stringify(teacherBackup.value));
   children.value = JSON.parse(JSON.stringify(childrenBackup.value));
-  showConfirmDialog.value = false;
   saved.value = true;
-  listTeacher();
-  listChild();
+  showConfirmDialog.value = false;
 };
 </script>
 
