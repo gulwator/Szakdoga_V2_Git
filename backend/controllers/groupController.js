@@ -51,18 +51,6 @@ const addGroup = asyncHandler(async (req, res) => {
  * POST /api/groups
  * @access public
  */
-const addGroupTeacher = asyncHandler(async (req, res) => {
-  let sql = `INSERT INTO teachersInGroups (userIds, groupId) VALUES(?,?)`;
-  const { userIds, groupId } = req.body;
-  db.run(sql, [userIds, groupId], (error) => {
-    if (error) {
-      res.status(500).json({ error: error.message });
-      return;
-    }
-    res.status(201).json({ message: "teachersInGroups added to database" });
-  });
-});
-
 const Savegroupsintodatabase = async (req, res) => {
   const { users = [], children = [] } = req.body; // Alapértelmezett üres tömbök
 
@@ -71,7 +59,7 @@ const Savegroupsintodatabase = async (req, res) => {
       ? users.map((user) => {
           return new Promise((resolve, reject) => {
             db.run(
-              `INSERT INTO teachersInGroups (userId, groupId) VALUES (?, ?)`,
+              `INSERT or IGNORE into teachersInGroups (userId, groupId) VALUES (?, ?)`,
               [user.id, user.groupId],
               (error) => {
                 if (error) reject(error);
@@ -109,7 +97,7 @@ const Savegroupsintodatabase = async (req, res) => {
 module.exports = {
   getGroups,
   addGroup,
-  addGroupTeacher,
+
   getGroupTeachers,
   Savegroupsintodatabase,
 };

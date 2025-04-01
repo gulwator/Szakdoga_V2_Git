@@ -1,0 +1,46 @@
+Children
+    id primery key autoincrement
+    name
+    dateOfBirth
+    parentName
+    parentPhone
+    address
+    schoolId
+    color
+    groupId
+    bandNumber
+    illness
+
+Users
+    id
+    name
+    username
+    password
+    email
+    role
+    institutionId
+    groupId
+    color
+    bandNumber
+    address
+
+Institutions
+    om
+    name
+    address
+    https://kirint.kir.hu/IntezmenyKereso/
+
+Groups
+    id
+    name
+    institutionId
+
+Programs
+    id
+    name
+    description
+    location
+
+TeachersInGroup
+    groupId
+    userId

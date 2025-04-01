@@ -1,6 +1,5 @@
 const dbInitTables = (db) => {
-  db.run("Delete from institutions");
-  db.run(`INSERT INTO institutions (om,name,address) VALUES 
+  db.run(`INSERT Or Ignore into institutions (om,name,address) VALUES 
 ("026991","Városközponti Óvoda","7624 Pécs, Budai Nagy Antal utca 5.  (hrsz.: '3220/16.')"),
 ("026993","Nyugati Városrészi Óvoda","7623 Pécs, Mezőszél utca 2.  (hrsz.: '1/11')"),
 ("027000","Kertvárosi Óvoda","7632 Pécs, Testvérvárosok tere 1-3.  (hrsz.: '')"),

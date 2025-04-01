@@ -1,4 +1,3 @@
-const dbInitTables = require("./dbInitTables.js");
 const createTables = (db) => {
   db.run(
     `CREATE TABLE IF NOT EXISTS children(
@@ -16,11 +15,21 @@ const createTables = (db) => {
   );
   db.run(
     `CREATE TABLE IF NOT EXISTS institutions(
-          id integer PRIMARY KEY AUTOINCREMENT,
-          name text,
-          om text NOT NULL,
-          address text)`
+      om INTEGER PRIMARY KEY NOT NULL,  
+      name TEXT,
+      address TEXT
+    )`,
+    (err) => {
+      if (err) {
+        console.error("Hiba a tábla létrehozásánál:", err.message);
+        return;
+      }
+      console.log(
+        "✅ Institutions tábla sikeresen létrehozva vagy már létezik"
+      );
+    }
   );
+
   db.run(
     `CREATE TABLE IF NOT EXISTS program(
           id integer PRIMARY KEY AUTOINCREMENT,
@@ -33,7 +42,8 @@ const createTables = (db) => {
     `CREATE TABLE IF NOT EXISTS groups(
             id integer PRIMARY KEY AUTOINCREMENT,
             name text,
-          institutionId integer
+          description not null,
+          maxLimit not null
           )`
   );
   db.run(
@@ -54,6 +64,22 @@ const createTables = (db) => {
       bandNumber integer,
       address text)`
   );
+
+  db.run(`CREATE TABLE IF NOT EXISTS TimeTable (
+    timetableId  PRIMARY KEY
+                 UNIQUE,
+    startDate,
+    startTime,
+    programId,
+    registered,
+    groupId,
+    holderId
+);
+db.run('CREATE TABLE groupsInTimetable (
+    timetableId,
+    groupId
+);')
+`);
 
   /* db.run(
       `CREATE TABLE IF NOT EXISTS teacher(
@@ -78,6 +104,5 @@ const createTables = (db) => {
           address text)`
           );
           */
-  dbInitTables(db);
 };
 module.exports = createTables;

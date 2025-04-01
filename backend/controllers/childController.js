@@ -10,6 +10,10 @@ const getContacts = asyncHandler(async (req, res) => {
   let sql = `SELECT * FROM children`;
 
   let contacts = db.all(sql, (error, rows) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
     res.status(200).send(rows);
   });
 });
