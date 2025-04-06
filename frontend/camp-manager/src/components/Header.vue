@@ -36,6 +36,9 @@
         <router-link class="nav-item nav-link" to="/manage-groups"
           >Csoportok kezelése</router-link
         >
+        <router-link class="nav-item nav-link" to="/groups-timetable"
+          >Csoportok időbeosztása</router-link
+        >
         <router-link class="nav-item nav-link" @click="logout" to="/"
           >Kijelentkezés</router-link
         >

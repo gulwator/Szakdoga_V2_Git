@@ -275,6 +275,7 @@ onMounted(() => {
 
 let teachersTodb = [];
 let childrensTodb = [];
+
 function OpenConfirmDialog() {
   showConfirmDialog.value = true;
   console.log(JSON.stringify(sortedTeachers.value));
@@ -301,8 +302,6 @@ const saveGroup = async (
     console.error(error);
   }
 };
-
-// Save groups
 
 // Modal
 const saveAndClose = () => {

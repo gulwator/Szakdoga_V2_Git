@@ -53,23 +53,38 @@ const registerForProgram = asyncHandler(async (req, res) => {
   });
 });
 
-/**Get all the programs with the institutions
- *
- */
-const getPrograms = asyncHandler(async (req, res) => {
-  let sql = `SELECT t.*,p.* from TimeTable as t left join program as p where t.programId = p.id`;
-  console.log();
-});
-
-/** Get all the group programs
- *
+/** Get all the programs with the groupId
+ * GET /api/programs/:groupId/getPrograms
  */
 const getProgramsForTheGroup = asyncHandler(async (req, res) => {
-  console.log();
+  let sql = `SELECT DISTINCT 
+    tt.startDate AS datum, 
+    tt.startTime AS idopont, 
+    p.name AS program
+FROM TimeTable tt
+LEFT JOIN program p ON tt.programId = p.id
+LEFT JOIN groupsInTimetable git ON tt.id = git.timetableId
+LEFT JOIN groups g ON git.groupId = g.id
+LEFT JOIN teachersInGroups tig ON g.id = tig.groupId
+LEFT JOIN users u ON tig.userId = u.id
+LEFT JOIN institutions i ON u.institutionId = i.om
+where g.id=${req.params.groupId}`;
+  db.all(sql, (error, rows) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    } else {
+      res.status(200).send(rows);
+    }
+  });
 });
 
 /** Set institution for the program
  *
  */
 
-module.exports = { getProgramsWithLimits, registerForProgram };
+module.exports = {
+  getProgramsWithLimits,
+  registerForProgram,
+  getProgramsForTheGroup,
+};

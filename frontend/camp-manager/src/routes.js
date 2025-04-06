@@ -6,6 +6,7 @@ import Registration from "./components/Authentication/Registration.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import RegistrationForm from "./components/Authentication/Register.vue";
 import ManageGroups from "./components/ManageGroups.vue";
+import GroupsTimetable from "./components/programsComponents/GroupsTimetable.vue";
 import Home from "./Home.vue";
 
 const routes = [
@@ -41,6 +42,11 @@ const routes = [
     name: "ManageGroups",
     path: "/manage-groups",
     component: ManageGroups,
+  },
+  {
+    name: "GroupsTimetable",
+    path: "/groups-timetable",
+    component: GroupsTimetable,
   },
   {
     name: "Home",

@@ -9,6 +9,11 @@ const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READWRITE, (err) => {
   console.log("Connection stable");
   return db;
 });
-createTables(db);
+try {
+  createTables(db);
+} catch (error) {
+  console.error("Error creating tables:", error.message);
+}
+// console.log("✅ db ready to work.");
 
 module.exports = { db };
