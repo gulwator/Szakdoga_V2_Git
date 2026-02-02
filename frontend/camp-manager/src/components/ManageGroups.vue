@@ -108,15 +108,13 @@
 
     <!-- Modal -->
     <div>
-      <button @click="showConfirmDialog = true">Save changes</button>
+      <!-- <button @click="showConfirmDialog = true">Save changes</button> -->
 
       <div v-if="showConfirmDialog" class="confirm-dialog-overlay">
         <div class="confirm-dialog">
           <p>Nem mentetted a módosításokat. Szeretnéd elmenteni?</p>
-          <button class="confirm-button" @click="saveAndClose">
-            Yes, save
-          </button>
-          <button class="confirm-button" @click="cancelSave">No, cancel</button>
+          <button class="confirm-button" @click="saveAndClose">Igen</button>
+          <button class="confirm-button" @click="cancelSave">Nem</button>
         </div>
       </div>
     </div>
@@ -233,6 +231,7 @@ const addTeacherToGroup = () => {
   newTeacher.value.groupId = selectedItem.value.id;
   listTeacher();
   saved.value = false;
+  console.log("mentes allapota:", saved.value);
   // console.log(sortedTeachers.value);
 };
 
@@ -251,7 +250,7 @@ watch(
   selectedItem,
   (newValue, oldValue) => {
     console.log("mentes allapota: ", saved.value);
-    if (saved.value === false) {
+    if (saved.value == false) {
       // TODO: A sortedGroup az már a befrissült verzió amikor mentek.
       console.log("watched sort:", sortedTeachers.value);
       OpenConfirmDialog();

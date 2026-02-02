@@ -65,7 +65,12 @@ const logIn = async () => {
       // this.$role = role;
       // sessionStorage.setItem("role", role);
       toast.success("Logged in successfully");
-      router.push("/child-list");
+      if (role == "Kisero") {
+        router.push("/child-list");
+      }
+      if (role == "Taboroztato") {
+        router.push("/programs");
+      }
     } else {
       toast.error("Invalid credentials");
     }
