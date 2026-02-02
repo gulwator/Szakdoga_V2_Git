@@ -10,6 +10,7 @@ const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READWRITE, (err) => {
   return db;
 });
 try {
+  db.run("PRAGMA foreign_keys = ON;");
   createTables(db);
 } catch (error) {
   console.error("Error creating tables:", error.message);

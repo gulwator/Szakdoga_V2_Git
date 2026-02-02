@@ -16,6 +16,32 @@ const getGroups = asyncHandler(async (req, res) => {
   });
 });
 
+/** Get all groups from given istitution
+ * GET /api/groups/:institutionId/getGroups
+ * @access public
+ */
+const getGroupswithCount = asyncHandler(async (req, res) => {
+  let sql = `SELECT 
+  g.name, 
+  g.id, 
+  COUNT(c.id) AS "count"
+FROM 
+  groups g
+LEFT JOIN 
+  children c ON g.id = c.groupId
+WHERE 
+  g.institutionId = ${req.params.institutionId}
+GROUP BY 
+  g.id, g.name`;
+  db.all(sql, (error, rows) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+    res.status(200).send(rows);
+  });
+});
+
 /** Get group Teacher
  * GET /api/groups/:institutionId/getTeachers
  * @access public
@@ -97,7 +123,7 @@ const Savegroupsintodatabase = async (req, res) => {
 module.exports = {
   getGroups,
   addGroup,
-
+  getGroupswithCount,
   getGroupTeachers,
   Savegroupsintodatabase,
 };
