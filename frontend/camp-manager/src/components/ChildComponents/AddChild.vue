@@ -2,7 +2,7 @@
   <div class="container m,t-4">
     <div class="row">
       <div class="col-md-6">
-        <form @submit.prevent="updateChild">
+        <form @submit.prevent="saveContact">
           <div class="form-group">
             <input
               type="text"
@@ -53,14 +53,6 @@
           <div class="form-group">
             <input
               type="text"
-              v-model="child.schoolId"
-              class="form-control"
-              placeholder="School"
-            />
-          </div>
-          <div class="form-group">
-            <input
-              type="text"
               v-model="child.illness"
               class="form-control"
               placeholder="illness"
@@ -74,7 +66,7 @@
               placeholder="Band number"
             />
           </div>
-          <button type="submit" class="btn btn-dark btn-sm mt-4">Update</button>
+          <button type="submit" class="btn btn-dark btn-sm mt-4">Submit</button>
         </form>
       </div>
     </div>
@@ -82,13 +74,10 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import axios from "axios";
-import { useRoute, useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-const route = useRoute();
-const router = useRouter();
-const toast = useToast();
+import store from "@/store";
 
 const child = ref({
   name: "",
@@ -97,22 +86,24 @@ const child = ref({
   parantPhone: "",
   address: "",
   schoolId: "",
+  groupId: "",
   color: "",
   bandNumber: "",
   illness: "",
 });
+const toast = useToast();
 
-const getChildById = async () => {
+const groups = async () => {
   try {
-    const url = `http://localhost:3000/api/child/${route.params.id}`;
-    const response = await axios.get(url);
-    child.value = response.data;
-    console.log(child);
+    const response = await axios.get("http://localhost:3000/api/group");
   } catch (error) {
     console.log(error);
+  } finally {
+    loading.value = false;
   }
 };
-const updateChild = async () => {
+
+const saveContact = async () => {
   console.log("Child values:", child.value);
   if (
     !child.value.name ||
@@ -120,25 +111,26 @@ const updateChild = async () => {
     !child.value.parantName ||
     !child.value.parantPhone ||
     !child.value.address ||
-    !child.value.schoolId ||
     !child.value.illness
   ) {
     toast.error("Fields are required");
   }
   try {
-    console.log(child.value);
-    const url = `http://localhost:3000/api/child/${route.params.id}`;
-    const response = await axios.put(url, child.value);
-    console.log(response.status);
+    const url = "http://localhost:3000/api/child";
+    const response = await axios.post(url, child.value);
+    console.log(response);
     if (response.status === 201) {
-      toast.success("Contact Updated Successfully");
-      router.push({ name: "ChildList" });
+      toast.success = "Child Added Succesfully";
+      child.value.name = "";
+      child.value.dateOfbirth = "";
+      child.value.parantName = "";
+      child.value.parantPhone = "";
+      child.value.address = "";
+      child.value.schoolId = store.getters.getInstitution;
+      child.value.illness = "";
     }
   } catch (error) {
     console.log(error);
   }
 };
-onMounted(() => {
-  getChildById();
-});
 </script>

@@ -16,8 +16,8 @@
         <tr class="table-secondary">
           <td>{{ child.name }}</td>
           <td>{{ child.dateOfBirth }}</td>
-          <td>{{ child.parantName }}</td>
-          <td>{{ child.parantPhone }}</td>
+          <td>{{ child.parentName }}</td>
+          <td>{{ child.parentPhone }}</td>
           <td>{{ child.address }}</td>
 
           <td>
@@ -32,7 +32,6 @@
             >
               Delete
             </button>
-            <button @click="Modal"></button>
           </td>
         </tr>
       </tbody>

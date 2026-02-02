@@ -2,7 +2,7 @@
   <div class="container m,t-4">
     <div class="row">
       <div class="col-md-6">
-        <form @submit.prevent="saveContact">
+        <form @submit.prevent="updateChild">
           <div class="form-group">
             <input
               type="text"
@@ -14,7 +14,7 @@
           <div class="form-group">
             <input
               type="date"
-              v-model="child.dateOfbirth"
+              v-model="child.dateOfBirth"
               class="form-control"
             />
           </div>
@@ -37,7 +37,7 @@
           <div class="form-group">
             <input
               type="text"
-              v-model="child.parantName"
+              v-model="child.parentName"
               class="form-control"
               placeholder="Parent Name"
             />
@@ -45,19 +45,12 @@
           <div class="form-group">
             <input
               type="text"
-              v-model="child.parantPhone"
+              v-model="child.parentPhone"
               class="form-control"
               placeholder="Parent Phone number"
             />
           </div>
-          <div class="form-group">
-            <input
-              type="text"
-              v-model="child.groupId"
-              class="form-control"
-              placeholder="School"
-            />
-          </div>
+
           <div class="form-group">
             <input
               type="text"
@@ -68,13 +61,14 @@
           </div>
           <div class="form-group">
             <input
+              disabled
               type="text"
               v-model="child.bandNumber"
               class="form-control"
               placeholder="Band number"
             />
           </div>
-          <button type="submit" class="btn btn-dark btn-sm mt-4">Submit</button>
+          <button type="submit" class="btn btn-dark btn-sm mt-4">Update</button>
         </form>
       </div>
     </div>
@@ -82,63 +76,69 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import axios from "axios";
+import { useRoute, useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import store from "@/store";
+
+const route = useRoute();
+const router = useRouter();
+const toast = useToast();
 
 const child = ref({
   name: "",
-  dateOfbirth: "",
-  parantName: "",
-  parantPhone: "",
+  dateOfBirth: "",
+  parentName: "",
+  parentPhone: "",
   address: "",
   schoolId: "",
-  groupId: "",
   color: "",
   bandNumber: "",
   illness: "",
 });
-const toast = useToast();
 
-const groups = async () => {
+const getChildById = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/group");
+    const url = `http://localhost:3000/api/child/${route.params.id}`;
+    const response = await axios.get(url);
+    child.value = response.data;
+    console.log(child.value.dateOfBirth);
+    child.value.dateOfBirth = child.value.dateOfBirth.replace(/\./g, "-");
+    console.log(child.value.dateOfBirth);
+    // console.log(child);
   } catch (error) {
     console.log(error);
-  } finally {
-    loading.value = false;
   }
 };
-
-const saveContact = async () => {
+const updateChild = async () => {
   console.log("Child values:", child.value);
   if (
     !child.value.name ||
-    !child.value.dateOfbirth ||
+    !child.value.dateOfBirth ||
     !child.value.parantName ||
     !child.value.parantPhone ||
     !child.value.address ||
+    !child.value.schoolId ||
     !child.value.illness
   ) {
     toast.error("Fields are required");
-  }
-  try {
-    const url = "http://localhost:3000/api/child";
-    const response = await axios.post(url, child.value);
-    console.log(response);
-    if (response.status === 201) {
-      toast.success = "Child Added Succesfully";
-      child.value.name = "";
-      child.value.dateOfbirth = "";
-      child.value.parantName = "";
-      child.value.parantPhone = "";
-      child.value.address = "";
-      child.value.schoolId = store.getters.getInstitution;
-      child.value.illness = "";
+  } else {
+    try {
+      child.value.dateOfBirth = child.value.dateOfBirth.replace(/\-/g, ".");
+      console.log(child.value);
+      const url = `http://localhost:3000/api/child/${route.params.id}`;
+      const response = await axios.put(url, child.value);
+      console.log(response.status);
+      if (response.status === 201) {
+        toast.success("Contact Updated Successfully");
+        router.push({ name: "ChildList" });
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
   }
 };
+onMounted(() => {
+  getChildById();
+});
 </script>
