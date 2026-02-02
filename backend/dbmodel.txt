@@ -1,46 +1,121 @@
-Children
-    id primery key autoincrement
-    name
-    dateOfBirth
-    parentName
-    parentPhone
-    address
-    schoolId
-    color
-    groupId
-    bandNumber
-    illness
+const createTables = (db) => {
+  db.run(
+    `CREATE TABLE IF NOT EXISTS children (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      dateOfBirth DATE NOT NULL,
+      parentName TEXT NOT NULL,
+      parentPhone TEXT NOT NULL,
+      address TEXT NOT NULL,
+      schoolId INTEGER NOT NULL,
+      color INTEGER,
+      groupId INTEGER,
+      bandNumber INTEGER,
+      illness TEXT
+    )`
+  );
 
-Users
-    id
-    name
-    username
-    password
-    email
-    role
-    institutionId
-    groupId
-    color
-    bandNumber
-    address
+  db.run(
+    `CREATE TABLE IF NOT EXISTS institutions (
+      om INTEGER PRIMARY KEY NOT NULL,
+      name TEXT,
+      address TEXT
+    )`,
+    (err) => {
+      if (err) {
+        console.error("Hiba a tábla létrehozásánál:", err.message);
+        return;
+      }
+      console.log("✅ Institutions tábla sikeresen létrehozva vagy már létezik");
+    }
+  );
 
-Institutions
-    om
-    name
-    address
-    https://kirint.kir.hu/IntezmenyKereso/
+  db.run(
+    `CREATE TABLE IF NOT EXISTS program (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      institutionId INTEGER
+    )`
+  );
 
-Groups
-    id
-    name
-    institutionId
+  db.run(
+    `CREATE TABLE IF NOT EXISTS groups (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      description TEXT NOT NULL,
+      maxLimit INTEGER NOT NULL
+    )`
+  );
 
-Programs
-    id
-    name
-    description
-    location
+  db.run(
+    `CREATE TABLE IF NOT EXISTS teachersInGroups (
+      userId INTEGER,
+      groupId INTEGER
+    )`
+  );
 
-TeachersInGroup
-    groupId
-    userId
+  db.run(
+    `CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL,
+      password TEXT NOT NULL,
+      name TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      role TEXT NOT NULL,
+      institutionId INTEGER,
+      groupId INTEGER,
+      color INTEGER,
+      bandNumber INTEGER,
+      address TEXT
+    )`
+  );
+
+  db.run(
+    `CREATE TABLE IF NOT EXISTS TimeTable (
+      timetableId INTEGER PRIMARY KEY AUTOINCREMENT,
+      startDate TEXT,
+      startTime TEXT,
+      programId INTEGER,
+      registered INTEGER,
+      groupId INTEGER,
+      holderId INTEGER
+    )`
+  );
+
+  db.run(
+    `CREATE TABLE IF NOT EXISTS groupsInTimetable (
+      timetableId INTEGER,
+      groupId INTEGER,
+      PRIMARY KEY (timetableId, groupId)
+    )`
+  );
+
+  /* Példák további táblákra, ha újra szeretnéd használni:
+  db.run(
+    \`CREATE TABLE IF NOT EXISTS teacher (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL,
+      password TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      institutionId INTEGER NOT NULL,
+      groupId INTEGER,
+      role TEXT NOT NULL,
+      address TEXT
+    )\`
+  );
+
+  db.run(
+    \`CREATE TABLE IF NOT EXISTS worker (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL,
+      password TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      groupId INTEGER,
+      role TEXT NOT NULL,
+      address TEXT
+    )\`
+  );
+  */
+};
+
+module.exports = createTables;
