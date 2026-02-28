@@ -6,8 +6,9 @@ const asyncHandler = require("express-async-handler");
  * @access public
  */
 const getGroups = asyncHandler(async (req, res) => {
-  let sql = `SELECT * FROM groups where institutionId=${req.params.institutionId}`;
-  db.all(sql, (error, rows) => {
+  let sql = `SELECT * FROM groups where institutionId=?`;
+
+  db.all(sql, [req.params.institutionId], (error, rows) => {
     if (error) {
       res.status(500).json({ error: error.message });
       return;
@@ -30,10 +31,10 @@ FROM
 LEFT JOIN 
   children c ON g.id = c.groupId
 WHERE 
-  g.institutionId = ${req.params.institutionId}
+  g.institutionId = ?
 GROUP BY 
   g.id, g.name`;
-  db.all(sql, (error, rows) => {
+  db.all(sql, [req.params.institutionId], (error, rows) => {
     if (error) {
       res.status(500).json({ error: error.message });
       return;
@@ -47,8 +48,8 @@ GROUP BY
  * @access public
  */
 const getGroupTeachers = asyncHandler(async (req, res) => {
-  let sql = `SELECT DISTINCT  u.id, u.name, u.address, t.groupId  FROM users AS u LEFT JOIN teachersInGroups AS t ON u.id = t.userId Where u.institutionId =${req.params.institutionId}`;
-  let groups = db.all(sql, (error, rows) => {
+  let sql = `SELECT DISTINCT  u.id, u.name, u.address, t.groupId  FROM users AS u LEFT JOIN teachersInGroups AS t ON u.id = t.userId Where u.institutionId = ?`;
+  let groups = db.all(sql, [req.params.institutionId], (error, rows) => {
     if (error) {
       res.status(500).json({ error: error.message });
       return;
@@ -90,7 +91,7 @@ const Savegroupsintodatabase = async (req, res) => {
               (error) => {
                 if (error) reject(error);
                 else resolve();
-              }
+              },
             );
           });
         })
@@ -106,7 +107,7 @@ const Savegroupsintodatabase = async (req, res) => {
               (error) => {
                 if (error) reject(error);
                 else resolve();
-              }
+              },
             );
           });
         })

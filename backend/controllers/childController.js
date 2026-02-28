@@ -23,10 +23,11 @@ const getContacts = asyncHandler(async (req, res) => {
  * @access public
  */
 const getChildFromGroup = asyncHandler(async (req, res) => {
-  let sql = `SELECT * FROM children Where groupId = ${req.params.groupId}`;
-  let contacts = db.all(sql, (error, rows) => {
+  let sql = `SELECT * FROM children WHERE groupId = ?`;
+  let contacts = db.all(sql, [req.params.groupId], (error, rows) => {
     if (error) {
-      res.status(400).send(error);
+      res.status(500).json({ error: error.message });
+      return;
     }
     res.status(200).send(rows);
   });
@@ -37,8 +38,12 @@ const getChildFromGroup = asyncHandler(async (req, res) => {
  * @access public
  */
 const getChildFromInstitution = asyncHandler(async (req, res) => {
-  let sql = `SELECT * FROM children Where institutionId = ${req.params.institutionId}`;
-  let contacts = db.all(sql, (error, rows) => {
+  let sql = `SELECT * FROM children WHERE institutionId = ?`;
+  let contacts = db.all(sql, [req.params.institutionId], (error, rows) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
     res.status(200).send(rows);
   });
 });
@@ -49,9 +54,14 @@ const getChildFromInstitution = asyncHandler(async (req, res) => {
  * @access public
  */
 const addChilToGroup = asyncHandler(async (req, res) => {
-  let sql = `UPDATE children SET groupId =${req.params.groupId} Where id = ${req.params.childid}`;
+  let sql = `UPDATE children SET groupId = ? WHERE id = ?`;
 
-  db.run(sql);
+  db.run(sql, [req.params.groupId, req.params.childid], (error) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+  });
   res.status(200).json({ message: "Child added to group" });
 });
 
@@ -79,7 +89,7 @@ const createChild = asyncHandler(async (req, res) => {
     !address ||
     !schoolId
   ) {
-    res.status(400);
+    res.status(500);
     throw new Error("all fields are reqired!");
   }
   const query =
@@ -95,7 +105,12 @@ const createChild = asyncHandler(async (req, res) => {
     bandNumber,
     illness,
   ];
-  const child = db.run(query, values);
+  db.run(query, values, (error) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+  });
   res.status(201).json({ message: "Child added to database" });
 });
 
@@ -105,8 +120,12 @@ const createChild = asyncHandler(async (req, res) => {
  */
 const getChild = (req, res) => {
   const sql = "SELECT * FROM children WHERE id=?";
-  values = [req.params.id];
+  const values = [req.params.id];
   const user = db.get(sql, values, (error, row) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
     res.status(200).send(row);
   });
 };
@@ -140,7 +159,12 @@ const updateChild = (req, res) => {
     illness,
     req.params.id,
   ];
-  db.run(sql, values);
+  db.run(sql, values, (error) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+  });
   res.status(201).json({ message: "child modified in database" });
 };
 
@@ -153,8 +177,13 @@ const deleteChild = (req, res) => {
   const sql = "DELETE FROM children WHERE id=?";
   values = req.params.id;
 
-  db.run(sql, values);
-  res.status(200).json({ message: `Contact deleted for ${req.params.id}` });
+  db.run(sql, values, (error) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+  });
+  res.status(200).json({ message: `Child deleted for ${values}` });
 };
 
 module.exports = {

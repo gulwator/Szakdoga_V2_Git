@@ -48,7 +48,7 @@ const registerForProgram = asyncHandler(async (req, res) => {
       db.get(
         "SELECT childLimit FROM program WHERE id = ?",
         [timetableId],
-        (error, row) => (error ? reject(error) : resolve(row))
+        (error, row) => (error ? reject(error) : resolve(row)),
       );
     });
     if (!programCapacity) {
@@ -64,7 +64,7 @@ const registerForProgram = asyncHandler(async (req, res) => {
         JOIN children ON children.groupId = groups.id
         WHERE groupsInTimetable.timetableId = ?`,
         [timetableId],
-        (error, row) => (error ? reject(error) : resolve(row))
+        (error, row) => (error ? reject(error) : resolve(row)),
       );
     });
 
@@ -72,7 +72,7 @@ const registerForProgram = asyncHandler(async (req, res) => {
       db.get(
         "SELECT COUNT(*) AS 'count' FROM children WHERE groupId = ?",
         [groupId],
-        (error, row) => (error ? reject(error) : resolve(row))
+        (error, row) => (error ? reject(error) : resolve(row)),
       );
     });
     console.log(groupSize);
@@ -102,7 +102,7 @@ const registerForProgram = asyncHandler(async (req, res) => {
         res
           .status(201)
           .json({ message: "Csoport sikeresen regisztrálva a programra." });
-      }
+      },
     );
   } catch (error) {
     console.error(error);
@@ -125,8 +125,8 @@ LEFT JOIN groups g ON git.groupId = g.id
 LEFT JOIN teachersInGroups tig ON g.id = tig.groupId
 LEFT JOIN users u ON tig.userId = u.id
 LEFT JOIN institutions i ON u.institutionId = i.om
-where g.id=${req.params.groupId}`;
-  db.all(sql, (error, rows) => {
+where g.id=?`;
+  db.all(sql, [req.params.groupId], (error, rows) => {
     if (error) {
       res.status(500).json({ error: error.message });
       return;
