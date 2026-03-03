@@ -16,8 +16,8 @@ app.use("/api/groups", require("./routes/groupRoutes"));
 app.use("/api/programs", require("./routes/programRoutes"));
 app.use(errorHandler);
 
-const port = parseInt(process.env.port);
-
+//const port = parseInt(process.env.port);
+const port = 3000;
 app.listen(port, () => {
   console.log(`server running in port  ${port}`);
 });
