@@ -95,7 +95,9 @@ const toast = useToast();
 
 const groups = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/group");
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/group`,
+    );
   } catch (error) {
     console.log(error);
   } finally {
@@ -116,7 +118,7 @@ const saveContact = async () => {
     toast.error("Fields are required");
   }
   try {
-    const url = "http://localhost:3000/api/child";
+    const url = `${import.meta.env.VITE_API_BASE_URL}/child`;
     const response = await axios.post(url, child.value);
     console.log(response);
     if (response.status === 201) {

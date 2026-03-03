@@ -1,7 +1,6 @@
 <template>
   <div v-if="store.state.role != 'null'" class="container">
-    <Cliploader v-if="loading" />
-    <table v-else class="table table-hover">
+    <table class="table table-hover">
       <thead>
         <tr>
           <th>Name</th>
@@ -39,36 +38,31 @@
   </div>
 </template>
 <script setup>
-import axios from "axios";
-import { Modal } from "bootstrap/dist/js/bootstrap.bundle.min";
 import { ref, onMounted } from "vue";
-import Cliploader from "vue-spinner/src/ClipLoader.vue";
+import axios from "axios";
 import { useToast } from "vue-toastification";
-
 import { useStore } from "vuex";
-
 const store = useStore();
+const toast = useToast();
 
 const institutionId = store.getters.getInstitution;
-const apiUrl = "http://localhost:3000/api/child/institution/" + institutionId;
 const children = ref([]);
-const loading = ref(true);
-const toast = useToast();
 const getContacts = async () => {
   try {
-    const response = await axios.get(apiUrl);
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/child/institution/${institutionId}`,
+    );
 
     children.value = response.data;
     return response;
   } catch (error) {
     console.log(error);
   } finally {
-    loading.value = false;
   }
 };
 const deleteChild = async (id) => {
   try {
-    const url = `${apiUrl}/${id}`;
+    const url = `${import.meta.env.VITE_API_BASE_URL}/child/institution/${institutionId}/${id}`;
     if (confirm("All you sure you want to delete the child")) {
       const response = await axios.delete(url);
 

@@ -99,7 +99,7 @@ const child = ref({
 
 const getChildById = async () => {
   try {
-    const url = `http://localhost:3000/api/child/${route.params.id}`;
+    const url = `${import.meta.env.VITE_API_BASE_URL}/child/${route.params.id}`;
     const response = await axios.get(url);
     child.value = response.data;
     console.log(child.value.dateOfBirth);
@@ -126,7 +126,7 @@ const updateChild = async () => {
     try {
       child.value.dateOfBirth = child.value.dateOfBirth.replace(/\-/g, ".");
       console.log(child.value);
-      const url = `http://localhost:3000/api/child/${route.params.id}`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/child/${route.params.id}`;
       const response = await axios.put(url, child.value);
       console.log(response.status);
       if (response.status === 201) {

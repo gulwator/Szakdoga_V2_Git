@@ -125,6 +125,7 @@
   </div>
 </template>
 <script setup>
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
@@ -155,7 +156,9 @@ const institutions = ref([]);
 
 const getInstitutions = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/institutions");
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/institutions`,
+    );
     console.log(response.data);
     institutions.value = response.data;
   } catch (error) {
@@ -207,18 +210,21 @@ const register = async () => {
       "\n institution: ",
       user.value.institution,
       "\n address: ",
-      userAddress.trim()
+      userAddress.trim(),
     );
     try {
-      const response = await axios.post("http://localhost:3000/api/register", {
-        username: user.value.username,
-        email: user.value.email,
-        name: user.value.name,
-        password: user.value.password,
-        role: user.userType.value,
-        institution: user.value.institution,
-        address: userAddress.trim(),
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/register`,
+        {
+          username: user.value.username,
+          email: user.value.email,
+          name: user.value.name,
+          password: user.value.password,
+          role: user.userType.value,
+          institution: user.value.institution,
+          address: userAddress.trim(),
+        },
+      );
 
       console.log("server válasza:", response.data);
     } catch (error) {

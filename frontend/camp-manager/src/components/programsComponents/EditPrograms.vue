@@ -68,6 +68,7 @@
 </template>
 
 <script setup>
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import store from "@/store";
@@ -82,9 +83,7 @@ const showModal = ref(false);
 const getGroups = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/groups/" +
-        institutionId +
-        "/getGroupsWithCount"
+      `${import.meta.env.VITE_API_BASE_URL}/groups/${institutionId}/getGroupsWithCount`,
     );
     groups.value = response.data;
     console.log(groups.value);
@@ -95,7 +94,7 @@ const getGroups = async () => {
 const getPrograms = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/programs/getProgramsWithLimits"
+      `${import.meta.env.VITE_API_BASE_URL}/programs/getProgramsWithLimits`,
     );
     programs.value = response.data;
   } catch (error) {
@@ -104,8 +103,10 @@ const getPrograms = async () => {
 };
 
 const saveProgram = async () => {
-  if(selectedGroup.value.count + selectedProgram.value.regisztraltakszama <= selectedProgram.value.regisztraltakszama ){
-
+  if (
+    selectedGroup.value.count + selectedProgram.value.regisztraltakszama <=
+    selectedProgram.value.regisztraltakszama
+  ) {
   }
 };
 const openModal = (program) => {

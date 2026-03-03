@@ -49,8 +49,8 @@ const logIn = async () => {
   }
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/login",
-      user.value
+      `${import.meta.env.VITE_API_BASE_URL}/login`,
+      user.value,
     );
 
     if (response.data.message == 1) {
@@ -59,12 +59,7 @@ const logIn = async () => {
       store.dispatch("changeRole", role);
       store.dispatch("changeInstitution", response.data.institution);
       store.dispatch("changeToken", token);
-
-      // console.log(token);
-      // sessionStorage.setItem("token", token);
-      // this.$role = role;
-      // sessionStorage.setItem("role", role);
-      toast.success("Logged in successfully");
+      toast.success("Sikeres bejelentkezés");
       if (role == "Kisero") {
         router.push("/child-list");
       }
@@ -72,11 +67,24 @@ const logIn = async () => {
         router.push("/programs");
       }
     } else {
-      toast.error("Invalid credentials");
+      toast.error("Hibás e-mail vagy jelszó");
     }
   } catch (error) {
     console.log(error);
-    toast.error("valami nem sikerült");
+    if (error.response) {
+      // A szerver válaszolt, de hibás státuszkóddal (pl. 401, 500)
+      if (error.response.status === 401) {
+        toast.error("Hibás e-mail vagy jelszó");
+      } else {
+        toast.error(`Szerverhiba: ${error.response.status} (${error.response.statusText})`);
+      }
+    } else if (error.request) {
+      // Nem érkezett válasz a szervertől
+      toast.error("Nem elérhető a szerver. Próbáld újra később!");
+    } else {
+      // Egyéb hiba
+      toast.error("Ismeretlen hiba történt a bejelentkezés során.");
+    }
   }
 };
 </script>

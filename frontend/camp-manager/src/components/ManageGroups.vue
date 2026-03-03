@@ -122,13 +122,11 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
-import { onBeforeRouteLeave } from "vue-router";
 import { useToast } from "vue-toastification";
+import { ref, onMounted, watch } from "vue";
 import axios from "axios";
-import Cliploader from "vue-spinner/src/ClipLoader.vue";
-import store from "@/store";
-
+import { useStore } from "vuex";
+const store = useStore();
 const toast = useToast();
 const inputValue = ref("");
 const items = ref([]);
@@ -154,7 +152,7 @@ var notGroupTeachers = ref([]);
 const getGroups = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/groups/" + institutionId + "/getGroups/"
+      `${import.meta.env.VITE_API_BASE_URL}/groups/${institutionId}/getGroups/`,
     );
     items.value = response.data;
     // console.log("csoportok sikeresen lekérdezve");
@@ -167,7 +165,7 @@ const getGroups = async () => {
 const getChildren = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/child/institution/" + institutionId
+      `${import.meta.env.VITE_API_BASE_URL}/child/institution/${institutionId}`,
     );
     children.value = response.data;
     childrenBackup.value = response.data;
@@ -181,7 +179,7 @@ const getChildren = async () => {
 const getTeachers = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/groups/" + institutionId + "/getTeachers/"
+      `${import.meta.env.VITE_API_BASE_URL}/groups/${institutionId}/getTeachers/`,
     );
     teachers.value = response.data;
     teacherBackup.value = JSON.parse(JSON.stringify(response.data));
@@ -196,7 +194,7 @@ const getTeachers = async () => {
 const addGroup = async () => {
   if (inputValue.value) {
     try {
-      await axios.post("http://localhost:3000/api/groups/addGroup", {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/groups/addGroup`, {
         name: inputValue.value,
       });
       items.value.push({ name: inputValue.value });
@@ -263,7 +261,7 @@ watch(
     listChild();
     listTeacher();
   },
-  { immediate: true, deep: true }
+  { immediate: true, deep: true },
 );
 
 onMounted(() => {
@@ -284,12 +282,12 @@ function OpenConfirmDialog() {
 // Save groups
 const saveGroup = async (
   teachers = sortedTeachers.value,
-  children = sortedChildren.value
+  children = sortedChildren.value,
 ) => {
   console.log("users:", teachers);
   console.log("children: ", children);
   try {
-    await axios.put("http://localhost:3000/api/groups/saveGroups", {
+    await axios.put(`${import.meta.env.VITE_API_BASE_URL}/groups/saveGroups`, {
       users: teachers,
       children: children,
     });

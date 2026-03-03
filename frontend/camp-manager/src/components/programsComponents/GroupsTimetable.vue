@@ -27,6 +27,7 @@
 </template>
 
 <script setup>
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import { ref, onMounted, watch, computed } from "vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
@@ -40,7 +41,7 @@ const groupPrograms = ref([]);
 const getGroups = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/groups/" + institutionId + "/getGroups/"
+      `${import.meta.env.VITE_API_BASE_URL}/groups/${institutionId}/getGroups/`,
     );
     items.value = response.data;
     // console.log("csoportok sikeresen lekérdezve");
@@ -57,9 +58,7 @@ const getPrograms = async () => {
   console.log("selectedItem.value.id: ", selectedItem.value.id);
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/programs/" +
-        selectedItem.value.id +
-        "/getPrograms/"
+      `${import.meta.env.VITE_API_BASE_URL}/programs/${selectedItem.value.id}/getPrograms/`,
     );
     groupPrograms.value = response.data;
     console.log("groupPrograms.value: ", groupPrograms.value);
