@@ -17,4 +17,11 @@ const app = createApp(App);
 app.use(Toast).use(router).use(store);
 
 app.mount("#app");
+
+const token = localStorage.getItem("token");
+const role = localStorage.getItem("role");
+const institution = localStorage.getItem("institution");
+if (token) store.dispatch("changeToken", token);
+if (role) store.dispatch("changeRole", role);
+if (institution) store.dispatch("changeInstitution", institution);
 // createApp(App).mount("#app");

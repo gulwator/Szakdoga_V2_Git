@@ -56,12 +56,17 @@ const logIn = async () => {
     if (response.data.message == 1) {
       var token = response.data.token;
       var role = response.data.role;
-      store.dispatch("changeRole", role);
-      store.dispatch("changeInstitution", response.data.institution);
+      console.log(response.data);
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
       store.dispatch("changeToken", token);
+      store.dispatch("changeRole", role);
       toast.success("Sikeres bejelentkezés");
       if (role == "Kisero") {
+        var institution = response.data.institution;
         router.push("/child-list");
+        localStorage.setItem("institution", response.data.institution);
+        store.dispatch("changeInstitution", institution);
       }
       if (role == "Taboroztato") {
         router.push("/programs");
@@ -76,7 +81,9 @@ const logIn = async () => {
       if (error.response.status === 401) {
         toast.error("Hibás e-mail vagy jelszó");
       } else {
-        toast.error(`Szerverhiba: ${error.response.status} (${error.response.statusText})`);
+        toast.error(
+          `Szerverhiba: ${error.response.status} (${error.response.statusText})`,
+        );
       }
     } else if (error.request) {
       // Nem érkezett válasz a szervertől

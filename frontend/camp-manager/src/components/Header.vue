@@ -144,15 +144,15 @@ import { useStore } from "vuex";
 const store = useStore();
 
 const role = computed(() => store.getters.getRole);
-const institution = computed(() => store.getters.getInstitution);
 const token = computed(() => store.getters.getToken);
+const institution = computed(() => store.getters.getInstitution);
 
 watch(role, (newRole, oldRole) => {
   console.log(`Role megváltozott: ${oldRole} → ${newRole}`);
 });
 watch(institution, (newInstitution, oldInstitution) => {
   console.log(
-    `Institution megváltozott: ${oldInstitution} → ${newInstitution}`
+    `Institution megváltozott: ${oldInstitution} → ${newInstitution}`,
   );
 });
 watch(token, (newToken, oldToken) => {
@@ -160,9 +160,12 @@ watch(token, (newToken, oldToken) => {
 });
 // Kilépés funkció
 const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  localStorage.removeItem("institution");
   store.dispatch("changeToken", "null");
-  store.dispatch("changeInstitution", "null");
   store.dispatch("changeRole", "null");
+  store.dispatch("changeInstitution", "null");
   router.push("/");
 };
 </script>
