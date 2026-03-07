@@ -8,8 +8,7 @@ const asyncHandler = require("express-async-handler");
   */
 const getContacts = asyncHandler(async (req, res) => {
   let sql = `SELECT * FROM children`;
-
-  let contacts = db.all(sql, (error, rows) => {
+  db.all(sql, (error, rows) => {
     if (error) {
       res.status(500).json({ error: error.message });
       return;
@@ -19,12 +18,12 @@ const getContacts = asyncHandler(async (req, res) => {
 });
 
 /** Get children from Group
- * GET /api/child/group/:groupId
+ * @route GET /api/child/group/:groupId
  * @access public
  */
 const getChildFromGroup = asyncHandler(async (req, res) => {
   let sql = `SELECT * FROM children WHERE groupId = ?`;
-  let contacts = db.all(sql, [req.params.groupId], (error, rows) => {
+  db.all(sql, [req.params.groupId], (error, rows) => {
     if (error) {
       res.status(500).json({ error: error.message });
       return;
@@ -34,7 +33,7 @@ const getChildFromGroup = asyncHandler(async (req, res) => {
 });
 
 /** Get children from institution
- * GET /api/child/institution/:institutionId
+ * @route GET /api/child/institution/:institutionId
  * @access public
  */
 const getChildFromInstitution = asyncHandler(async (req, res) => {
@@ -66,7 +65,7 @@ const addChilToGroup = asyncHandler(async (req, res) => {
 });
 
 /** Create new child
- * POST /api/child
+ * @route POST /api/child
  * @access public
  */
 const createChild = asyncHandler(async (req, res) => {
@@ -115,7 +114,7 @@ const createChild = asyncHandler(async (req, res) => {
 });
 
 /** Get child
- * GET /api/child/:id
+ * @route GET /api/child/:id
  * @access public
  */
 const getChild = (req, res) => {

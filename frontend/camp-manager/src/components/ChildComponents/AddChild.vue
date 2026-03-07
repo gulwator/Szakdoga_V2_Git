@@ -112,8 +112,7 @@ const saveContact = async () => {
     !child.value.dateOfbirth ||
     !child.value.parantName ||
     !child.value.parantPhone ||
-    !child.value.address ||
-    !child.value.illness
+    !child.value.address
   ) {
     toast.error("Fields are required");
   }
