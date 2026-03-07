@@ -2,26 +2,27 @@ import ChildList from "./components/ChildComponents/ChildList.vue";
 import AddChild from "./components/ChildComponents/AddChild.vue";
 import EditChild from "./components/ChildComponents/EditChild.vue";
 import LoginWithEmail from "./components/Authentication/Login.vue";
-import Registration from "./components/Authentication/Registration.vue";
+import RegistrationChoseUserType from "./components/Authentication/RegistrationChoseUserType.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import RegistrationForm from "./components/Authentication/Register.vue";
+import RegistrationForUsers from "./components/Authentication/RegistrationForUsers.vue";
 import ManageGroups from "./components/ManageGroups.vue";
 import EditPrograms from "./components/programsComponents/EditPrograms.vue";
 import GroupsTimetable from "./components/programsComponents/GroupsTimetable.vue";
 import Home from "./Home.vue";
-import Schedule from "./components/programsComponents/WorkerTimeTable.vue";
+import Schedule from "./components/Staff/StaffTimeTable.vue";
+import AllProgramInOnePlace from "./components/programsComponents/AllProgramInOnePlace.vue";
 
 const routes = [
   {
     name: "Registration",
     path: "/registration",
-    component: Registration,
+    component: RegistrationChoseUserType,
     props: true,
   },
   {
     name: "RegistrationForm",
     path: "/registration/:userType",
-    component: RegistrationForm,
+    component: RegistrationForUsers,
     props: true,
   },
   {
@@ -66,6 +67,11 @@ const routes = [
     name: "Home",
     path: "/",
     component: Home,
+  },
+  {
+    name: "AllProgramInOnePlace",
+    path: "/all-programs",
+    component: AllProgramInOnePlace,
   },
 ];
 const router = createRouter({
