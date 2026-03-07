@@ -101,7 +101,7 @@
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/tabor-programok"
+              <router-link class="nav-link" to="/all-programs"
                 >Programok</router-link
               >
             </li>

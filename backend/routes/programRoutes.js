@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getProgramsWithLimits,
-  registerForProgram,
+  getPrograms,
+  registerGroupForProgram,
   getProgramsForTheGroup,
 } = require("../controllers/programController");
 
-router.get("/getProgramsWithLimits", getProgramsWithLimits);
-router.post("/registerForProgram", registerForProgram);
+router.get("/getPrograms", getPrograms);
+router.post("/registerGroupForProgram", registerGroupForProgram);
 router.get("/:groupId/getPrograms", getProgramsForTheGroup);
 module.exports = router;

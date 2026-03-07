@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import Timetable from "./Timetable.vue";
+import Timetable from "../programsComponents/Timetable.vue";
 import store from "@/store";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 </script>

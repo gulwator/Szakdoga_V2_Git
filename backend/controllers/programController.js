@@ -2,15 +2,18 @@ const { db } = require("../dbConnection/dbConnection");
 const asyncHandler = require("express-async-handler");
 
 /**
- * Get all the programs with limits for táboroztato timetable fokepernyo.
- * Maybe users too.
+ * Get all the programs
+ * @access public
+ * @route GET /api/programs/WithLimits
  */
-const getProgramsWithLimits = asyncHandler(async (req, res) => {
+const getPrograms = asyncHandler(async (req, res) => {
   let sql = `SELECT DISTINCT tt.id AS id,
     tt.startDate AS datum, 
     tt.startTime AS idopont, 
     p.name AS program, 
     p.description AS leiras,
+      i.name AS iskola,
+      g.name AS csoport,
     (
         SELECT COALESCE(COUNT(c.id), 0) 
         FROM groupsInTimetable git
@@ -41,7 +44,7 @@ LEFT JOIN institutions i ON u.institutionId = i.om;`;
  * @access public
  * POST /api/programs/registerForProgram
  */
-const registerForProgram = asyncHandler(async (req, res) => {
+const registerGroupForProgram = asyncHandler(async (req, res) => {
   const { timetableId, groupId } = req.body;
   try {
     const programCapacity = await new Promise((resolve, reject) => {
@@ -137,7 +140,7 @@ where g.id=?`;
 });
 
 module.exports = {
-  getProgramsWithLimits,
-  registerForProgram,
+  getPrograms,
+  registerGroupForProgram,
   getProgramsForTheGroup,
 };
