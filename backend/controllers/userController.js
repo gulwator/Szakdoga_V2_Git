@@ -23,10 +23,6 @@ const register = asyncHandler(async (req, res) => {
   const { username, name, email, password, role, institution, address } =
     req.body;
 
-  if (institution == null) {
-    institution = undefined;
-  }
-
   // Hash the password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);

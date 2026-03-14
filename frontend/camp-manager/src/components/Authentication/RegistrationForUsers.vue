@@ -65,6 +65,7 @@
             </option>
           </select>
         </div>
+
         <div data-mdb-input-init class="mb-5">
           <label class="form-label" for="zipcode">Irányítószám</label>
           <input
@@ -170,6 +171,7 @@ const getInstitutions = async () => {
 // REGISTER METHOD
 const register = async () => {
   console.log(user.userType);
+
   if (
     !user.value.username ||
     !user.value.password ||
@@ -183,49 +185,25 @@ const register = async () => {
   ) {
     toast.error("Please fill all fields");
   } else {
-    let userAddress =
-      user.value.address.zipcode +
-      " " +
-      user.value.address.city +
-      " " +
-      user.value.address.street +
-      " " +
-      user.value.address.number +
-      " " +
-      user.value.address.floor +
-      " " +
-      user.value.address.door;
-    console.log(userAddress.trim());
-    console.log(
-      "username: ",
-      user.value.username,
-      "\n email: ",
-      user.value.email,
-      "\n name: ",
-      user.value.name,
-      "\n password: ",
-      user.value.password,
-      "\n role: ",
-      user.userType.value,
-      "\n institution: ",
-      user.value.institution,
-      "\n address: ",
-      userAddress.trim(),
-    );
+    let userAddress = fullAddress();
+    let requestBody = {
+      username: user.value.username,
+      email: user.value.email,
+      name: user.value.name,
+      password: user.value.password,
+      role: user.userType.value,
+      address: userAddress.trim(),
+    };
+
+    if (user.userType.value === "Kisero") {
+      requestBody.institution = user.value.institution;
+    }
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/register`,
-        {
-          username: user.value.username,
-          email: user.value.email,
-          name: user.value.name,
-          password: user.value.password,
-          role: user.userType.value,
-          institution: user.value.institution,
-          address: userAddress.trim(),
-        },
+        requestBody,
       );
-
       console.log("server válasza:", response.data);
     } catch (error) {
       console.log(error);
@@ -233,6 +211,22 @@ const register = async () => {
     toast.success("User registered successfully");
     router.push("/");
   }
+};
+
+const fullAddress = () => {
+  return (
+    user.value.address.zipcode +
+    " " +
+    user.value.address.city +
+    " " +
+    user.value.address.street +
+    " " +
+    user.value.address.number +
+    " " +
+    user.value.address.floor +
+    " " +
+    user.value.address.door
+  ).trim();
 };
 
 onMounted(() => {
