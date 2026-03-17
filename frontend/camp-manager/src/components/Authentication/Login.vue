@@ -1,32 +1,32 @@
 <template>
-  <form @submit.prevent="logIn">
-    <div class="form-group">
-      <label for="exampleInputEmail1">Email address</label>
-      <input
-        type="email"
-        class="form-control"
-        id="exampleInputEmail1"
-        aria-describedby="emailHelp"
-        placeholder="Enter email"
-        v-model="user.email"
-      />
-    </div>
-    <div class="form-group">
-      <label for="exampleInputPassword1">Password</label>
-      <input
-        type="password"
-        class="form-control"
-        id="exampleInputPassword1"
-        placeholder="Password"
-        v-model="user.password"
-      />
-    </div>
-    <div class="form-group form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+  <div class="login-container">
+    <form class="login-form" @submit.prevent="logIn">
+      <h2 class="login-title">Bejelentkezés</h2>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email cím</label>
+        <input
+          type="email"
+          class="form-control"
+          id="exampleInputEmail1"
+          placeholder="Email"
+          v-model="user.email"
+        />
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Jelszó</label>
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+          placeholder="Jelszó"
+          v-model="user.password"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">
+        Bejelentkezés
+      </button>
+    </form>
+  </div>
 </template>
 
 <script setup>
@@ -95,4 +95,52 @@ const logIn = async () => {
   }
 };
 </script>
-<style></style>
+<style>
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f6fa;
+}
+
+.login-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  color: #2d3436;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+.btn-block {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+  .login-form {
+    padding: 1rem;
+    max-width: 90vw;
+  }
+}
+</style>
