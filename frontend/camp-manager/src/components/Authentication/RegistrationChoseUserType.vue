@@ -4,17 +4,19 @@
       <div
         @click="navigateToForm('Kisero')"
         class="btn btn-outline-primary square-btn"
+        data-testid="teacher-btn"
       >
         <img class="btn-img" src="/teacher_1995413.png" alt="Teacher" />
 
-        <div>Register as Teacher</div>
+        <div>Regisztráció tanároknak</div>
       </div>
       <div
         @click="navigateToForm('Taboroztato')"
         class="btn btn-outline-primary square-btn"
+        data-testid="worker-btn"
       >
         <img class="btn-img" src="/burn_13350109.png" alt="Campside" />
-        <div>Register as Worker</div>
+        <div>Regisztráció dolgozóknak</div>
       </div>
     </div>
   </div>

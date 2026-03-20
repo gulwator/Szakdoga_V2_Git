@@ -8,6 +8,7 @@
             type="text"
             id="name"
             class="form-control"
+            data-testid="name-input"
             v-model="user.name"
           />
         </div>
@@ -17,6 +18,7 @@
             type="text"
             id="username"
             class="form-control"
+            data-testid="username-input"
             v-model="user.username"
           />
         </div>
@@ -26,6 +28,7 @@
             type="email"
             id="email"
             class="form-control"
+            data-testid="email-input"
             v-model="user.email"
           />
         </div>
@@ -35,6 +38,7 @@
             type="password"
             id="password-first"
             class="form-control"
+            data-testid="password-input"
             v-model="user.password"
           />
         </div>
@@ -46,6 +50,7 @@
             type="password"
             id="password-second"
             class="form-control"
+            data-testid="checkpassword-input"
             v-model="user.checkpassword"
           />
         </div>
@@ -55,7 +60,13 @@
           class="mb-5"
         >
           <label class="form-label" for="institution">Intézmény</label>
-          <select class="form-select" v-model="user.institution" name="" id="">
+          <select
+            class="form-select"
+            data-testid="institution-select"
+            v-model="user.institution"
+            name=""
+            id=""
+          >
             <option
               v-for="institution in institutions"
               v-bind:key="institution.om"
@@ -72,6 +83,7 @@
             type="text"
             id="zipcode"
             class="form-control"
+            data-testid="zipcode-input"
             v-model="user.address.zipcode"
           />
         </div>
@@ -81,6 +93,7 @@
             type="text"
             id="city"
             class="form-control"
+            data-testid="city-input"
             v-model="user.address.city"
           />
         </div>
@@ -90,6 +103,7 @@
             type="text"
             id="street"
             class="form-control"
+            data-testid="street-input"
             v-model="user.address.street"
           />
         </div>
@@ -99,6 +113,7 @@
             type="text"
             id="number"
             class="form-control"
+            data-testid="number-input"
             v-model="user.address.number"
           />
         </div>
@@ -108,6 +123,7 @@
             type="text"
             id="floor"
             class="form-control"
+            data-testid="floor-input"
             v-model="user.address.floor"
           />
         </div>
@@ -117,11 +133,18 @@
             type="text"
             id="door"
             class="form-control"
+            data-testid="door-input"
             v-model="user.address.door"
           />
         </div>
       </div>
-      <button type="submit" class="btn btn-primary btn-lg">Register</button>
+      <button
+        type="submit"
+        class="btn btn-primary btn-lg"
+        data-testid="register-sbmt"
+      >
+        Register
+      </button>
     </form>
   </div>
 </template>
@@ -133,7 +156,7 @@ import { useToast } from "vue-toastification";
 import { useRoute } from "vue-router";
 const route = useRoute();
 const user = ref({
-  role: "",
+  role: route.params.userType,
   username: "",
   name: "",
   password: "",
@@ -151,7 +174,7 @@ const user = ref({
   },
 });
 
-user.userType = ref(route.params.userType);
+user.value.role = route.params.userType;
 const toast = useToast();
 const institutions = ref([]);
 
@@ -191,7 +214,7 @@ const register = async () => {
       email: user.value.email,
       name: user.value.name,
       password: user.value.password,
-      role: user.userType.value,
+      role: user.value.role,
       address: userAddress.trim(),
     };
 
@@ -209,7 +232,7 @@ const register = async () => {
       console.log(error);
     }
     toast.success("User registered successfully");
-    router.push("/");
+    route.push("/");
   }
 };
 

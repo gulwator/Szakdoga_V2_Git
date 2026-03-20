@@ -8,6 +8,7 @@
           type="email"
           class="form-control"
           id="exampleInputEmail1"
+          data-testid="email-input"
           placeholder="Email"
           v-model="user.email"
         />
@@ -18,11 +19,12 @@
           type="password"
           class="form-control"
           id="exampleInputPassword1"
+          data-testid="password-input"
           placeholder="Jelszó"
           v-model="user.password"
         />
       </div>
-      <button type="submit" class="btn btn-primary btn-block">
+      <button type="submit" data-testid="login-sbmt" class="btn btn-primary btn-block">
         Bejelentkezés
       </button>
     </form>
