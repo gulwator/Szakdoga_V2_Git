@@ -45,12 +45,12 @@ const register = asyncHandler(async (req, res) => {
     institution,
     address,
   ];
-  console.log(values);
+
   db.run(query, values, function (err) {
     if (err) {
       return res.json({ error: err.message });
     }
-
+    console.log("User registered :", email);
     res.status(201).json({ message: "User added to database" });
   });
 });
