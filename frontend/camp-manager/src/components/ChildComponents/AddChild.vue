@@ -1,10 +1,11 @@
 <template>
-  <div class="container m,t-4">
+  <div class="container mt-4">
     <div class="row">
       <div class="col-md-6">
         <form @submit.prevent="saveContact">
           <div class="form-group">
             <input
+              data-testid="nameTb"
               type="text"
               v-model="child.name"
               class="form-control"
@@ -13,6 +14,7 @@
           </div>
           <div class="form-group">
             <input
+              data-testid="dateOfBirthDp"
               type="date"
               v-model="child.dateOfbirth"
               class="form-control"
@@ -20,6 +22,7 @@
           </div>
           <div class="form-group">
             <input
+              data-testid="addressTb"
               type="text"
               v-model="child.address"
               class="form-control"
@@ -28,6 +31,7 @@
           </div>
           <div class="form-group">
             <input
+              data-testid="colorTb"
               type="text"
               v-model="child.color"
               class="form-control"
@@ -36,22 +40,25 @@
           </div>
           <div class="form-group">
             <input
+              data-testid="parentNameTb"
               type="text"
-              v-model="child.parantName"
+              v-model="child.parentName"
               class="form-control"
               placeholder="Parent Name"
             />
           </div>
           <div class="form-group">
             <input
+              data-testid="parentPhoneTb"
               type="text"
-              v-model="child.parantPhone"
+              v-model="child.parentPhone"
               class="form-control"
               placeholder="Parent Phone number"
             />
           </div>
           <div class="form-group">
             <input
+              data-testid="illnessTb"
               type="text"
               v-model="child.illness"
               class="form-control"
@@ -60,13 +67,20 @@
           </div>
           <div class="form-group">
             <input
+              data-testid="bandNumberTb"
               type="text"
               v-model="child.bandNumber"
               class="form-control"
               placeholder="Band number"
             />
           </div>
-          <button type="submit" class="btn btn-dark btn-sm mt-4">Submit</button>
+          <button
+            data-testid="AddChildSubmitBtn"
+            type="submit"
+            class="btn btn-dark btn-sm mt-4"
+          >
+            Gyerek hozzáadása
+          </button>
         </form>
       </div>
     </div>
@@ -82,10 +96,10 @@ import store from "@/store";
 const child = ref({
   name: "",
   dateOfbirth: "",
-  parantName: "",
-  parantPhone: "",
+  parentName: "",
+  parentPhone: "",
   address: "",
-  schoolId: "",
+  institutionId: store.getters.getInstitution,
   groupId: "",
   color: "",
   bandNumber: "",
@@ -93,41 +107,30 @@ const child = ref({
 });
 const toast = useToast();
 
-const groups = async () => {
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_BASE_URL}/group`,
-    );
-  } catch (error) {
-    console.log(error);
-  } finally {
-    loading.value = false;
-  }
-};
-
 const saveContact = async () => {
   console.log("Child values:", child.value);
   if (
     !child.value.name ||
     !child.value.dateOfbirth ||
-    !child.value.parantName ||
-    !child.value.parantPhone ||
+    !child.value.parentName ||
+    !child.value.parentPhone ||
     !child.value.address
   ) {
-    toast.error("Fields are required");
+    toast.error("Kérem, töltse ki az összes kötelező mezőt!");
+    return;
   }
   try {
     const url = `${import.meta.env.VITE_API_BASE_URL}/child`;
     const response = await axios.post(url, child.value);
     console.log(response);
     if (response.status === 201) {
-      toast.success = "Child Added Succesfully";
+      toast.success("Gyerek hozzáadva");
       child.value.name = "";
       child.value.dateOfbirth = "";
-      child.value.parantName = "";
-      child.value.parantPhone = "";
+      child.value.parentName = "";
+      child.value.parentPhone = "";
       child.value.address = "";
-      child.value.schoolId = store.getters.getInstitution;
+      child.value.institutionId = store.getters.getInstitution;
       child.value.illness = "";
     }
   } catch (error) {

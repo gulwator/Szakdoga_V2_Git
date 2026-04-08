@@ -11,6 +11,7 @@
         aria-controls="navbarNav"
         aria-expanded="false"
         aria-label="Toggle navigation"
+        data-testid="header-navbar-toggler"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -18,7 +19,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <!-- BAL OLDAL -->
         <ul class="navbar-nav">
-          <li class="nav-item">
+          <li class="nav-item" data-testid="nav-home-link">
             <router-link class="nav-link" to="/" exact-active-class="active"
               >Home</router-link
             >
@@ -33,17 +34,22 @@
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
+                data-testid="gyerekekDrpHeader"
               >
                 Gyerekek
               </a>
               <ul class="dropdown-menu custom-dropdown">
                 <li>
-                  <router-link class="dropdown-item text-light" to="/child-list"
+                  <router-link
+                    data-testid="gyerekekListajaBtnHeader"
+                    class="dropdown-item text-light"
+                    to="/child-list"
                     >Gyerekek listája</router-link
                   >
                 </li>
                 <li>
                   <router-link
+                    data-testid="gyerekHozzaadasBtnHeader"
                     class="dropdown-item text-light"
                     to="/create-contact"
                     >Gyerek hozzáadása</router-link
@@ -55,6 +61,7 @@
             <!-- Csoportok dropdown -->
             <li class="nav-item dropdown">
               <a
+                data-testid="csoportokDrpHeader"
                 class="nav-link dropdown-toggle"
                 href="#"
                 role="button"
@@ -66,6 +73,7 @@
               <ul class="dropdown-menu custom-dropdown">
                 <li>
                   <router-link
+                    data-testid="csoportokKezeleseBtnHeader"
                     class="dropdown-item text-light"
                     to="/manage-groups"
                     >Csoportok kezelése</router-link
@@ -73,6 +81,7 @@
                 </li>
                 <li>
                   <router-link
+                    data-testid="csoportokOrarendjeBtnHeader"
                     class="dropdown-item text-light"
                     to="/groups-timetable"
                     >Csoportok órarendje</router-link
@@ -80,6 +89,7 @@
                 </li>
                 <li>
                   <router-link
+                    data-testid="csoportokProgramjaiBtnHeader"
                     class="dropdown-item text-light"
                     to="/edit-programs"
                     >Programok</router-link
