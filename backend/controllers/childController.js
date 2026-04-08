@@ -72,36 +72,32 @@ const createChild = asyncHandler(async (req, res) => {
   const {
     name,
     dateOfbirth,
-    parantName,
-    parantPhone,
+    parentName,
+    parentPhone,
     address,
-    schoolId,
-    color,
-    bandNumber,
+    institutionId,
     illness,
   } = req.body;
   if (
     !name ||
     !dateOfbirth ||
-    !parantName ||
-    !parantPhone ||
+    !parentName ||
+    !parentPhone ||
     !address ||
-    !schoolId
+    !institutionId
   ) {
     res.status(500);
     throw new Error("all fields are reqired!");
   }
   const query =
-    "INSERT INTO children (name,dateOfBirth,parantName,parantPhone,address, schoolId, color, bandNumber, illness) VALUES(?,?,?,?,?,?,?,?,?)";
+    "INSERT INTO children (name,dateOfBirth,parentName,parentPhone,address, institutionId, illness) VALUES(?,?,?,?,?,?,?,?,?)";
   const values = [
     name,
     dateOfbirth,
-    parantName,
-    parantPhone,
+    parentName,
+    parentPhone,
     address,
-    schoolId,
-    color,
-    bandNumber,
+    institutionId,
     illness,
   ];
   db.run(query, values, (error) => {
