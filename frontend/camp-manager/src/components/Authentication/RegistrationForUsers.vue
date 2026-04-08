@@ -149,7 +149,6 @@
   </div>
 </template>
 <script setup>
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
@@ -162,7 +161,6 @@ const user = ref({
   password: "",
   checkpassword: "",
   email: "",
-  userType: "",
   institution: "",
   address: {
     zipcode: "",
@@ -188,12 +186,12 @@ const getInstitutions = async () => {
   } catch (error) {
     console.log(error);
   }
-  console.log(user.userType.value);
+  console.log(user.value.role);
 };
 
 // REGISTER METHOD
 const register = async () => {
-  console.log(user.userType);
+  console.log(user.value.role);
 
   if (
     !user.value.username ||
@@ -218,7 +216,7 @@ const register = async () => {
       address: userAddress.trim(),
     };
 
-    if (user.userType.value === "Kisero") {
+    if (user.value.role === "Kisero") {
       requestBody.institution = user.value.institution;
     }
 
@@ -253,7 +251,9 @@ const fullAddress = () => {
 };
 
 onMounted(() => {
-  if (user.userType.value == "Kisero") {
+  console.log(user);
+  console.log(user.value.role);
+  if (user.value.role == "Kisero") {
     getInstitutions();
   }
 });
