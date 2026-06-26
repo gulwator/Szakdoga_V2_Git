@@ -1,10 +1,12 @@
 <template>
-  <Header title="Camp Manager" />
-  <router-view />
+  <div id="app" class="d-flex flex-column">
+    <Header title="Camp Manager" />
+    <router-view />
+  </div>
 </template>
 
 <script setup>
-import Header from "./components/Header.vue";
+import Header from "./components/Header/Header.vue";
 </script>
 <style>
 body {

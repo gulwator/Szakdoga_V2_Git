@@ -2,9 +2,9 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    role: "null",
-    institution: "null",
-    token: "null",
+    role: null,
+    institution: null,
+    token: null,
   },
   mutations: {
     changeRole(state, role) {

@@ -53,21 +53,17 @@ const logIn = async () => {
     const response = await axios.post(
       `${import.meta.env.VITE_API_BASE_URL}/login`,
       user.value,
+      { withCredentials: true },
     );
 
     if (response.data.message == 1) {
-      var token = response.data.token;
       var role = response.data.role;
       console.log(response.data);
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", role);
-      store.dispatch("changeToken", token);
       store.dispatch("changeRole", role);
       toast.success("Sikeres bejelentkezés");
       if (role == "Kisero") {
         var institution = response.data.institution;
         router.push("/child-list");
-        localStorage.setItem("institution", response.data.institution);
         store.dispatch("changeInstitution", institution);
       }
       if (role == "Taboroztato") {

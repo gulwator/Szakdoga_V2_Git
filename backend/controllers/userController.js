@@ -50,7 +50,7 @@ const register = asyncHandler(async (req, res) => {
     if (err) {
       return res.json({ error: err.message });
     }
-    console.log("User registered :", email);
+
     res.status(201).json({ message: "User added to database" });
   });
 });
@@ -60,27 +60,33 @@ const register = asyncHandler(async (req, res) => {
 // @access  Public*/
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
   if (!email || !password) {
     res.status(400);
     throw new Error("all fields are reqired!");
   }
   let sql = `SELECT * FROM users WHERE email = ?`;
   db.get(sql, [email], async (error, row) => {
-    if (row && (await bcrypt.compare(password, row.password))) {
+    if (error) {
+      res.status(500).json({ message: "Server error" });
+    } else if (row && (await bcrypt.compare(password, row.password))) {
       // Generate JWT token
-      console.log("eddig jó\n");
-      console.log(row);
       const token = jwt.sign({ id: row.id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
       });
 
-      res.status(200).json({
-        message: 1,
-        token,
-        role: row.role,
-        institution: row.institutionId,
-      });
+      res
+        .status(200)
+        .cookie("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "Lax",
+          maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        })
+        .json({
+          message: 1,
+          role: row.role,
+          institution: row.institutionId,
+        });
     } else {
       res.status(401).json({ message: 0 });
       // throw new Error("Invalid email or password");
@@ -90,24 +96,38 @@ const login = asyncHandler(async (req, res) => {
 
 // Middleware to protect routes
 const protect = asyncHandler(async (req, res, next) => {
-  let token;
+  const token = req.cookies.token;
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    try {
-      token = req.headers.authorization.split(" ")[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded.id;
-      next();
-    } catch (error) {
-      res.status(401);
-      throw new Error("Not authorized, token failed");
-    }
+  if (!token) {
+    res.status(401);
+    throw new Error("Not authorized, no token");
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded.id;
+    next();
+  } catch (error) {
+    res.status(401);
+    throw new Error("Not authorized, token failed");
   }
 });
 
-//TODO:GET TEACHERS FROM INSTITUTION
+// Logout
+const logout = asyncHandler(async (req, res) => {
+  res
+    .clearCookie("token")
+    .status(200)
+    .json({ message: "Logged out successfully" });
+});
 
-module.exports = { getUsers, register, login, protect };
+// Get profile
+const getProfile = asyncHandler(async (req, res) => {
+  const sql = `SELECT id, username, name, email, role, institutionId FROM users WHERE id = ?`;
+  db.get(sql, [req.user], (error, row) => {
+    if (error) return res.status(500).json({ message: "Server error" });
+    if (!row) return res.status(404).json({ message: "User not found" });
+    res.status(200).json(row);
+  });
+});
+
+module.exports = { getUsers, register, login, logout, getProfile, protect };

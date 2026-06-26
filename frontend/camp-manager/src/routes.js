@@ -9,8 +9,10 @@ import ManageGroups from "./components/ManageGroups.vue";
 import EditPrograms from "./components/programsComponents/EditPrograms.vue";
 import GroupsTimetable from "./components/programsComponents/GroupsTimetable.vue";
 import Home from "./Home.vue";
-import Schedule from "./components/Staff/StaffTimeTable.vue";
+import StaffTimeTable from "./components/Staff/StaffTimeTable.vue";
 import AllProgramInOnePlace from "./components/programsComponents/AllProgramInOnePlace.vue";
+import StaffAssignToProgram from "./components/Staff/StaffAssignToProgram.vue";
+import path from "node:path";
 
 const routes = [
   {
@@ -59,9 +61,9 @@ const routes = [
   },
   // Táboroztató route-ok
   {
-    name: "Schedule",
-    path: "/schedule",
-    component: Schedule,
+    name: "StaffTimeTable",
+    path: "/staff-timetable",
+    component: StaffTimeTable,
   },
   {
     name: "Home",
@@ -72,6 +74,11 @@ const routes = [
     name: "AllProgramInOnePlace",
     path: "/all-programs",
     component: AllProgramInOnePlace,
+  },
+  {
+    name: "StaffAssignToProgram",
+    path: "/staff-assign-to-program",
+    component: StaffAssignToProgram,
   },
 ];
 const router = createRouter({

@@ -40,7 +40,7 @@ LEFT JOIN institutions i ON u.institutionId = i.om;`;
 });
 
 /**
- * register group for the program
+ * register institution group for the program
  * @access public
  * POST /api/programs/registerForProgram
  */
@@ -114,6 +114,7 @@ const registerGroupForProgram = asyncHandler(async (req, res) => {
 });
 
 /** Get all the programs with the groupId
+ * @access public
  * GET /api/programs/:groupId/getPrograms
  */
 const getProgramsForTheGroup = asyncHandler(async (req, res) => {
@@ -139,8 +140,45 @@ where g.id=?`;
   });
 });
 
+/**
+ * Get all the programs where is no staff asigned
+ * @access public
+ * @route GET /api/programs/WithLimits
+ */
+const getProgramsWithNullStaff = asyncHandler(async (req, res) => {
+  let sql = `SELECT DISTINCT tt.id AS id,
+    tt.startDate AS datum, 
+    tt.startTime AS idopont, 
+    p.name AS program, 
+    p.description AS leiras,
+    tt.holderId AS tartja,
+    (
+        SELECT COALESCE(COUNT(c.id), 0) 
+        FROM groupsInTimetable git
+        LEFT JOIN children c ON git.groupId = c.groupId
+        WHERE git.timetableId = tt.id
+    ) AS regisztraltakszama,
+     p.childLimit as maxFerohely
+FROM TimeTable tt
+LEFT JOIN program p ON tt.programId = p.id
+LEFT JOIN groupsInTimetable git ON tt.id = git.timetableId
+LEFT JOIN groups g ON git.groupId = g.id
+LEFT JOIN teachersInGroups tig ON g.id = tig.groupId
+LEFT JOIN users u ON tig.userId = u.id
+LEFT JOIN institutions i ON u.institutionId = i.om;`;
+  db.all(sql, (error, rows) => {
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    } else {
+      res.status(200).send(rows);
+    }
+  });
+});
+
 module.exports = {
   getPrograms,
   registerGroupForProgram,
   getProgramsForTheGroup,
+  getProgramsWithNullStaff,
 };

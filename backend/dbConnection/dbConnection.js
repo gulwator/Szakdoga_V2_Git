@@ -1,7 +1,7 @@
 const createTables = require("./dbCreateTables.js");
 
 const sqlite3 = require("sqlite3").verbose();
-const dbData = process.env.DB_DATA || "./data.db";
+const dbData = process.env.DB_DATA;
 const db = new sqlite3.Database(dbData, sqlite3.OPEN_READWRITE, (err) => {
   if (err) {
     return console.error(err.message);

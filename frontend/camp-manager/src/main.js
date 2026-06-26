@@ -17,11 +17,19 @@ const app = createApp(App);
 app.use(Toast).use(router).use(store);
 
 app.mount("#app");
+// enable sending cookies with requests
+axios.defaults.withCredentials = true;
 
-const token = localStorage.getItem("token");
-const role = localStorage.getItem("role");
-const institution = localStorage.getItem("institution");
-if (token) store.dispatch("changeToken", token);
-if (role) store.dispatch("changeRole", role);
-if (institution) store.dispatch("changeInstitution", institution);
+// fetch profile on startup to populate auth state (cookie-based)
+axios
+  .get(`${import.meta.env.VITE_API_BASE_URL}/profile`)
+  .then((resp) => {
+    if (resp.data && resp.data.role)
+      store.dispatch("changeRole", resp.data.role);
+    if (resp.data && resp.data.institutionId)
+      store.dispatch("changeInstitution", resp.data.institutionId);
+  })
+  .catch(() => {
+    // no-op if not authenticated
+  });
 // createApp(App).mount("#app");
