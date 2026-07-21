@@ -9,7 +9,7 @@ backend/.vscode/settings.json
 
 .vscode/
 out.sql
-utasitas.md
+*.md
 
 /frontend/camp-manager/test-results/
 /frontend/camp-manager/playwright-report/
