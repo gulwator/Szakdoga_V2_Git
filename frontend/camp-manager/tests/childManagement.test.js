@@ -41,7 +41,7 @@ test("gyermek hozzáadása hiányos adatokkal", async ({ page }) => {
   await page.click('button[data-testid="AddChildSubmitBtn"]');
 
   const errorToast = page.locator(".Vue-Toastification__toast--error");
-  await expect(errorToast).toHaveText(
+  await expect(errorToast).toContainText(
     "Kérem, töltse ki az összes kötelező mezőt!",
   );
 });

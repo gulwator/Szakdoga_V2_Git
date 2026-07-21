@@ -24,7 +24,11 @@
           v-model="user.password"
         />
       </div>
-      <button type="submit" data-testid="login-sbmt" class="btn btn-primary btn-block">
+      <button
+        type="submit"
+        data-testid="login-sbmt"
+        class="btn btn-primary btn-block"
+      >
         Bejelentkezés
       </button>
     </form>
@@ -53,25 +57,35 @@ const logIn = async () => {
     const response = await axios.post(
       `${import.meta.env.VITE_API_BASE_URL}/login`,
       user.value,
+      { withCredentials: true },
     );
 
     if (response.data.message == 1) {
-      var token = response.data.token;
-      var role = response.data.role;
-      console.log(response.data);
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", role);
+      const token = response.data.token;
+      const role = response.data.role;
+      const userData = response.data.user;
       store.dispatch("changeToken", token);
       store.dispatch("changeRole", role);
+      store.dispatch("changeUser", userData);
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("institution", response.data.institution);
+      localStorage.setItem("user", JSON.stringify(userData));
+      await axios
+        .get(`${import.meta.env.VITE_API_BASE_URL}/csrf`, {
+          withCredentials: true,
+        })
+        .then((csrfResponse) => {
+          store.dispatch("changeCsrfToken", csrfResponse.data.csrfToken);
+        });
       toast.success("Sikeres bejelentkezés");
       if (role == "Kisero") {
-        var institution = response.data.institution;
+        const institution = response.data.institution;
         router.push("/child-list");
-        localStorage.setItem("institution", response.data.institution);
         store.dispatch("changeInstitution", institution);
       }
       if (role == "Taboroztato") {
-        router.push("/programs");
+        router.push("/all-programs");
       }
     } else {
       toast.error("Hibás e-mail vagy jelszó");

@@ -117,14 +117,6 @@ watch(selectedItem, () => {
 
 onMounted(() => {
   getGroups();
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
-  const institution = localStorage.getItem("institution");
-  if (token && role && institution) {
-    store.dispatch("changeToken", token);
-    store.dispatch("changeRole", role);
-    store.dispatch("changeInstitution", institution);
-  }
 });
 </script>
 

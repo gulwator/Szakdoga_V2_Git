@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS institutions (
   name TEXT,
   address TEXT
 );
-INSERT INTO institutions (om, name, address) VALUES (10001, 'Minta Int�zet', '1234 Budapest, F� utca 1');
+INSERT INTO institutions (om, name, address) VALUES (10001, 'Minta Intézet', '1234 Budapest, Fő utca 1');
 
 -- Table: program
 DROP TABLE IF EXISTS program;

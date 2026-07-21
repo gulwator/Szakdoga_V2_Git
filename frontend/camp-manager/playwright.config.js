@@ -1,5 +1,13 @@
 // @ts-check
 import { defineConfig, devices } from "@playwright/test";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const testDbPath = path.resolve(__dirname, "tests/test.db");
+const backendRoot = path.resolve(__dirname, "../../backend");
+const frontendRoot = __dirname;
 
 /**
  * Read environment variables from file.
@@ -75,13 +83,18 @@ export default defineConfig({
   webServer: [
     {
       command: "node server.js",
-      cwd: "../../backend",
+      cwd: backendRoot,
       port: 3000,
       reuseExistingServer: true,
+      env: {
+        ...process.env,
+        DB_DATA: testDbPath,
+        PORT: "3000",
+      },
     },
     {
-      command: "npm run dev",
-      cwd: "./",
+      command: "npm run dev -- --host 127.0.0.1 --port 5173",
+      cwd: frontendRoot,
       port: 5173,
       reuseExistingServer: true,
     },

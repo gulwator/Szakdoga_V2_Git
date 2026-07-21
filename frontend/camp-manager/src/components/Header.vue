@@ -120,6 +120,14 @@
 
         <!-- JOBB OLDAL -->
         <ul class="navbar-nav ms-auto">
+          <template v-if="role !== 'null' && user">
+            <li class="nav-item me-3">
+              <span class="navbar-text text-light">
+                {{ user.name }} ({{ user.role }})
+              </span>
+            </li>
+          </template>
+
           <template v-if="role === 'null'">
             <li class="nav-item">
               <router-link class="nav-link" to="/registration"
@@ -147,6 +155,7 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import router from "@/routes";
 import { computed, watch } from "vue";
 import { useStore } from "vuex";
@@ -156,6 +165,7 @@ const store = useStore();
 const role = computed(() => store.getters.getRole);
 const token = computed(() => store.getters.getToken);
 const institution = computed(() => store.getters.getInstitution);
+const user = computed(() => store.getters.getUser);
 
 watch(role, (newRole, oldRole) => {
   console.log(`Role megváltozott: ${oldRole} → ${newRole}`);
@@ -169,13 +179,35 @@ watch(token, (newToken, oldToken) => {
   console.log(`Token megváltozott: ${oldToken} → ${newToken}`);
 });
 // Kilépés funkció
-const logout = () => {
+const logout = async () => {
+  try {
+    const csrfResponse = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/csrf`,
+      { withCredentials: true },
+    );
+
+    await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/logout`,
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          "X-CSRF-Token": csrfResponse.data.csrfToken,
+        },
+      },
+    );
+  } catch (error) {
+    console.error(error);
+  }
+
   localStorage.removeItem("token");
   localStorage.removeItem("role");
   localStorage.removeItem("institution");
-  store.dispatch("changeToken", "null");
+  localStorage.removeItem("user");
+  store.dispatch("changeToken", null);
   store.dispatch("changeRole", "null");
   store.dispatch("changeInstitution", "null");
+  store.dispatch("changeUser", null);
   router.push("/");
 };
 </script>
