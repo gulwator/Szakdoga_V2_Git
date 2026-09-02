@@ -53,15 +53,16 @@ const getChildFromInstitution = asyncHandler(async (req, res) => {
  * @access public
  */
 const addChilToGroup = asyncHandler(async (req, res) => {
-  let sql = `UPDATE children SET groupId = ? WHERE id = ?`;
+  const sql = `UPDATE children SET groupId = ? WHERE id = ?`;
 
   db.run(sql, [req.params.groupId, req.params.childid], (error) => {
     if (error) {
       res.status(500).json({ error: error.message });
       return;
     }
+
+    res.status(200).json({ message: "Child added to group" });
   });
-  res.status(200).json({ message: "Child added to group" });
 });
 
 /** Create new child
@@ -78,6 +79,7 @@ const createChild = asyncHandler(async (req, res) => {
     institutionId,
     illness,
   } = req.body;
+
   if (
     !name ||
     !dateOfbirth ||
@@ -86,11 +88,12 @@ const createChild = asyncHandler(async (req, res) => {
     !address ||
     !institutionId
   ) {
-    res.status(500);
-    throw new Error("all fields are reqired!");
+    res.status(400).json({ message: "all fields are required!" });
+    return;
   }
+
   const query =
-    "INSERT INTO children (name,dateOfBirth,parentName,parentPhone,address, institutionId, illness) VALUES(?,?,?,?,?,?,?,?,?)";
+    "INSERT INTO children (name,dateOfBirth,parentName,parentPhone,address, institutionId, illness) VALUES(?,?,?,?,?,?,?)";
   const values = [
     name,
     dateOfbirth,
@@ -100,13 +103,15 @@ const createChild = asyncHandler(async (req, res) => {
     institutionId,
     illness,
   ];
+
   db.run(query, values, (error) => {
     if (error) {
       res.status(500).json({ error: error.message });
       return;
     }
+
+    res.status(201).json({ message: "Child added to database" });
   });
-  res.status(201).json({ message: "Child added to database" });
 });
 
 /** Get child
@@ -116,7 +121,7 @@ const createChild = asyncHandler(async (req, res) => {
 const getChild = (req, res) => {
   const sql = "SELECT * FROM children WHERE id=?";
   const values = [req.params.id];
-  const user = db.get(sql, values, (error, row) => {
+  db.get(sql, values, (error, row) => {
     if (error) {
       res.status(500).json({ error: error.message });
       return;
@@ -141,8 +146,8 @@ const updateChild = (req, res) => {
     bandNumber,
     illness,
   } = req.body;
-  sql = `UPDATE children SET name = ?,dateOfBirth = ?,parantName = ?,parantPhone = ?,address = ?, schoolId = ?, color = ?, bandNumber = ?, illness = ? WHERE id = ?`;
-  values = [
+  const sql = `UPDATE children SET name = ?,dateOfBirth = ?,parantName = ?,parantPhone = ?,address = ?, schoolId = ?, color = ?, bandNumber = ?, illness = ? WHERE id = ?`;
+  const values = [
     name,
     dateOfbirth,
     parantName,
@@ -159,8 +164,9 @@ const updateChild = (req, res) => {
       res.status(500).json({ error: error.message });
       return;
     }
+
+    res.status(201).json({ message: "child modified in database" });
   });
-  res.status(201).json({ message: "child modified in database" });
 };
 
 /** Delete child
@@ -170,15 +176,16 @@ const updateChild = (req, res) => {
 
 const deleteChild = (req, res) => {
   const sql = "DELETE FROM children WHERE id=?";
-  values = req.params.id;
+  const values = req.params.id;
 
   db.run(sql, values, (error) => {
     if (error) {
       res.status(500).json({ error: error.message });
       return;
     }
+
+    res.status(200).json({ message: "Child deleted Successfully" });
   });
-  res.status(200).json({ message: `Child deleted for ${values}` });
 };
 
 module.exports = {

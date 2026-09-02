@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { reset, login } from "./scripts/testUtils.js";
+import { reset, login } from "../scripts/testUtils.js";
 
 test.beforeEach(async () => {
   await reset();
@@ -7,7 +7,7 @@ test.beforeEach(async () => {
 
 test("bejelentkezés staff userrel", async ({ page }) => {
   await login(page, "taboroztato@staff.com", "test");
-  await expect(page).toHaveURL("http://localhost:5173/programs");
+  await expect(page).toHaveURL("http://localhost:5173/all-programs");
 });
 
 test("bejelentkezés teacher userrel", async ({ page }) => {

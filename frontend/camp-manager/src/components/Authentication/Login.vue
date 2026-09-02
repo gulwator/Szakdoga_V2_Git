@@ -24,7 +24,11 @@
           v-model="user.password"
         />
       </div>
-      <button type="submit" data-testid="login-sbmt" class="btn btn-primary btn-block">
+      <button
+        type="submit"
+        data-testid="login-sbmt"
+        class="btn btn-primary btn-block"
+      >
         Bejelentkezés
       </button>
     </form>
@@ -57,17 +61,31 @@ const logIn = async () => {
     );
 
     if (response.data.message == 1) {
-      var role = response.data.role;
-      console.log(response.data);
+      const token = response.data.token;
+      const role = response.data.role;
+      const userData = response.data.user;
+      store.dispatch("changeToken", token);
       store.dispatch("changeRole", role);
+      store.dispatch("changeUser", userData);
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("institution", response.data.institution);
+      localStorage.setItem("user", JSON.stringify(userData));
+      await axios
+        .get(`${import.meta.env.VITE_API_BASE_URL}/csrf`, {
+          withCredentials: true,
+        })
+        .then((csrfResponse) => {
+          store.dispatch("changeCsrfToken", csrfResponse.data.csrfToken);
+        });
       toast.success("Sikeres bejelentkezés");
       if (role == "Kisero") {
-        var institution = response.data.institution;
+        const institution = response.data.institution;
         router.push("/child-list");
         store.dispatch("changeInstitution", institution);
       }
       if (role == "Taboroztato") {
-        router.push("/programs");
+        router.push("/schedule");
       }
     } else {
       toast.error("Hibás e-mail vagy jelszó");

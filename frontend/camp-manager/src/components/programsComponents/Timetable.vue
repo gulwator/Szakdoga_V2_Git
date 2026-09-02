@@ -1,3 +1,4 @@
+<!-- THE timetable which get called from multiple pages -->
 <template>
   <div class="container py-4">
     <div class="row row-cols-1 row-cols-md-7 g-3">
@@ -44,6 +45,7 @@ const getGroups = async () => {
         props.getGroupsUrl ||
         `${props.apiBaseUrl}/groups/${institutionId}/getGroups/`;
       const response = await axios.get(url);
+      console.log("Groups fetched successfully:", response.data);
       items.value = response.data;
     } catch (error) {
       console.error(error);
@@ -117,14 +119,6 @@ watch(selectedItem, () => {
 
 onMounted(() => {
   getGroups();
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
-  const institution = localStorage.getItem("institution");
-  if (token && role && institution) {
-    store.dispatch("changeToken", token);
-    store.dispatch("changeRole", role);
-    store.dispatch("changeInstitution", institution);
-  }
 });
 </script>
 

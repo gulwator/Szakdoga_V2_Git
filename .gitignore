@@ -1,5 +1,15 @@
 /backend/node_modules
 backend/data.db
+backend/minimal_data.db
+*.db
+*.sqlite
 
 backend/.vscode/settings.json
 *.env
+
+.vscode/
+out.sql
+*.md
+
+/frontend/camp-manager/test-results/
+/frontend/camp-manager/playwright-report/

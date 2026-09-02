@@ -66,9 +66,9 @@ const routes = [
     component: StaffTimeTable,
   },
   {
-    name: "Home",
+    name: "Login",
     path: "/",
-    component: Home,
+    component: LoginWithEmail,
   },
   {
     name: "AllProgramInOnePlace",

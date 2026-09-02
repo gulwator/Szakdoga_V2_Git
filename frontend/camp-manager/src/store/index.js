@@ -5,6 +5,8 @@ export default createStore({
     role: null,
     institution: null,
     token: null,
+    csrfToken: null,
+    user: null,
   },
   mutations: {
     changeRole(state, role) {
@@ -15,6 +17,12 @@ export default createStore({
     },
     changeToken(state, token) {
       state.token = token;
+    },
+    changeCsrfToken(state, csrfToken) {
+      state.csrfToken = csrfToken;
+    },
+    changeUser(state, user) {
+      state.user = user;
     },
   },
   actions: {
@@ -27,6 +35,12 @@ export default createStore({
     changeToken(context, token) {
       context.commit("changeToken", token);
     },
+    changeCsrfToken(context, csrfToken) {
+      context.commit("changeCsrfToken", csrfToken);
+    },
+    changeUser(context, user) {
+      context.commit("changeUser", user);
+    },
   },
   getters: {
     getRole(state) {
@@ -37,6 +51,12 @@ export default createStore({
     },
     getToken(state) {
       return state.token;
+    },
+    getCsrfToken(state) {
+      return state.csrfToken;
+    },
+    getUser(state) {
+      return state.user;
     },
   },
 });
