@@ -208,7 +208,7 @@ const logout = async () => {
   store.dispatch("changeRole", "null");
   store.dispatch("changeInstitution", "null");
   store.dispatch("changeUser", null);
-  router.push("/");
+  await router.push("/");
 };
 </script>
 

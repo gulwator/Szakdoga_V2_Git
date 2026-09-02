@@ -64,9 +64,9 @@ const routes = [
     component: Schedule,
   },
   {
-    name: "Home",
+    name: "Login",
     path: "/",
-    component: Home,
+    component: LoginWithEmail,
   },
   {
     name: "AllProgramInOnePlace",

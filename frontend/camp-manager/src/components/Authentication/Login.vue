@@ -85,7 +85,7 @@ const logIn = async () => {
         store.dispatch("changeInstitution", institution);
       }
       if (role == "Taboroztato") {
-        router.push("/all-programs");
+        router.push("/schedule");
       }
     } else {
       toast.error("Hibás e-mail vagy jelszó");

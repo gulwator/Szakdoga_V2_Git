@@ -1,3 +1,4 @@
+<!-- Staff user Schedule for the week it works from the universal timetable -->
 <template>
   <div>
     <h1 class="mb-4 text-center">Heti Beosztás</h1>

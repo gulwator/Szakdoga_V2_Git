@@ -1,3 +1,4 @@
+<!-- THE timetable which get called from multiple pages -->
 <template>
   <div class="container py-4">
     <div class="row row-cols-1 row-cols-md-7 g-3">
@@ -44,6 +45,7 @@ const getGroups = async () => {
         props.getGroupsUrl ||
         `${props.apiBaseUrl}/groups/${institutionId}/getGroups/`;
       const response = await axios.get(url);
+      console.log("Groups fetched successfully:", response.data);
       items.value = response.data;
     } catch (error) {
       console.error(error);
