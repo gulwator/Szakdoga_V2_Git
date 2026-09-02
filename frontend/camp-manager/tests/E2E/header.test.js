@@ -1,6 +1,6 @@
 // @ts-check
 import { test, expect } from "@playwright/test";
-import { loadAppAsGuest, loadAppWithRole } from "./scripts/testUtils.js";
+import { loadAppAsGuest, loadAppWithRole } from "../scripts/testUtils.js";
 
 test.describe("Header component", () => {
   test("renders guest auth actions for unauthenticated users", async ({
@@ -8,9 +8,15 @@ test.describe("Header component", () => {
   }) => {
     await loadAppAsGuest(page);
 
-    await expect(page.getByRole("link", { name: "Regisztráció" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Bejelentkezés" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Kijelentkezés" })).toHaveCount(0);
+    await expect(
+      page.getByRole("link", { name: "Regisztráció" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Bejelentkezés" }),
+    ).toBeVisible();
+    await expect(page.getByRole("link", { name: "Kijelentkezés" })).toHaveCount(
+      0,
+    );
   });
 
   test("renders kisero role navigation and logout", async ({ page }) => {

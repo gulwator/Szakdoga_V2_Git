@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { reset, login } from "./scripts/testUtils.js";
+import { reset, login } from "../scripts/testUtils.js";
 
 test.beforeEach(async () => {
   await reset();

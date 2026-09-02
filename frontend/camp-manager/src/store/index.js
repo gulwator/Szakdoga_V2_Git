@@ -2,8 +2,8 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    role: "null",
-    institution: "null",
+    role: null,
+    institution: null,
     token: null,
     csrfToken: null,
     user: null,
